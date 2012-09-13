@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE struts PUBLIC 
+	"-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+	"http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+	<!-- dict模块，继承Json基础包json-all，设置命名空间/dict -->
+	<package name="dict" extends="json-all">
+		<action name="getDictTree" class="com.cqtd.common.dict.action.CqSystemDictTypeAction" method="getDictTree">
+		</action>
+		<action name="saveDict" class="com.cqtd.common.dict.action.CqSystemDictTypeAction" method="saveDict">
+		</action>
+		<action name="removeDict" class="com.cqtd.common.dict.action.CqSystemDictTypeAction" method="removeDict">
+		</action>
+	</package>
+
+	
+</struts>

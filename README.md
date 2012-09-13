@@ -1,4 +1,4 @@
-junio
-=====
+cqtd
+====
 
-A generic J2EE structure for SSH
+To present our ERP-demo only. Since 12,2011

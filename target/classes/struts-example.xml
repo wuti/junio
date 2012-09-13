@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE struts PUBLIC 
+	"-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+	"http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+	<!-- example模块，继承Json基础包json-all，设置命名空间/example -->
+	<package name="example" extends="json-all" namespace="/example">
+		<action name="jsonList" class="com.cqtd.example.action.HelloAction" method="jsonList">
+			<result type="json">
+				<!-- root为struts2命名规范 -->
+				<param name="root">jsonList</param>
+			</result>
+		</action>
+		
+		
+	</package>
+
+	
+</struts>
