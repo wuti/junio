@@ -13,8 +13,8 @@
 				<param name="root">jsonList</param>
 			</result>
 		</action>
-		
-		
+		<action name="getAjaxData" class="com.cqtd.example.action.HelloAction" method="getAjaxData">
+		</action>
 	</package>
 
 	
