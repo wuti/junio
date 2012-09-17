@@ -1,13 +1,6 @@
 package com.cqtd.test.steve;
 
 import java.lang.reflect.InvocationTargetException;
-import java.util.Date;
-import java.util.List;
-
-import org.apache.commons.beanutils.BeanUtils;
-
-import com.cqtd.example.model.Foo;
-import com.google.common.collect.Lists;
 
 public class TestBeanUtils {
 	public static void main(String[] args) throws IllegalAccessException,

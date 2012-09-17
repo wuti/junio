@@ -2,9 +2,6 @@ package com.cqtd.common.ui.taglib.model;
 
 import javax.persistence.Embedded;
 
-import com.google.common.base.Preconditions;
-import com.google.common.base.Strings;
-
 /**
  * Data model for JsTree
  * 

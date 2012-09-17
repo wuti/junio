@@ -1,6 +1,5 @@
 package com.cqtd.common.base.pojo;
 
-import com.google.common.base.Objects;
 
 public class FooGoodsModel {
 	// 销售排名

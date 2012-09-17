@@ -1,7 +1,5 @@
 package com.cqtd.test.steve;
 
-import java.util.Date;
-import java.util.List;
 
 public class TestMigurateObject {
 //	private Date iDate;

@@ -1,7 +1,6 @@
 package com.cqtd.common.base.utils;
 
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -21,7 +20,6 @@ import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 
-import com.cqtd.common.base.pojo.FooGoodsModel;
 import com.google.common.base.Charsets;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableMap;
@@ -32,47 +30,66 @@ import com.google.gson.GsonBuilder;
 
 public class FooUtils {
 	/**
-	 * 标准时间转化Date->String
+	 * 转化为年到秒的时间格式
+	 * 
+	 * @param dateTime
+	 * @return
 	 */
-	public static String toStandardDate(DateTime dateTime) {
+	public static String toDateFromYear2Second(DateTime dateTime) {
 		return dateTime.toString("yyyy-MM-dd HH:mm:ss");
 	}
 
 	/**
-	 * 标准时间转化Date->String
+	 * 转化为年到秒的时间格式
+	 * 
+	 * @param date
+	 * @return
 	 */
-	public static String toStandardDateNoTime(DateTime dateTime) {
-		return dateTime.toString("yyyy-MM-dd");
-	}
-
-	/**
-	 * 标准时间转化Date->String
-	 */
-	public static String toStandardDate(Date date) {
-		return new DateTime(date).toString("yyyy-MM-dd HH:mm:ss");
-	}
-
-	/**
-	 * 标准时间转化Date->String
-	 */
-	public static String toStandardDateNoTime(Date date) {
-		return new DateTime(date).toString("yyyy-MM-dd");
-	}
-
-	/**
-	 * 标准时间转化String->Date
-	 */
-	public static Date toStandardDate(String date) {
+	public static Date toDateFromYear2Second(String date) {
 		return DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss")
 				.parseDateTime(date).toDate();
 	}
 
 	/**
-	 * 标准时间转化String->Date
+	 * 转化为年到天的时间格式
+	 * 
+	 * @param dateTime
+	 * @return
 	 */
-	public static Date toStandardDateNoTime(String date) {
+	public static String toDateFromYear2Day(DateTime dateTime) {
+		return dateTime.toString("yyyy-MM-dd");
+	}
+
+	/**
+	 * 转化为年到天的时间格式
+	 * 
+	 * @param date
+	 * @return
+	 */
+	public static Date toDateFromYear2Day(String date) {
 		return DateTimeFormat.forPattern("yyyy-MM-dd").parseDateTime(date)
 				.toDate();
+	}
+
+	/**
+	 * 转化为年到分钟的时间格式
+	 * 
+	 * @param dateTime
+	 * @return
+	 */
+	public static String toDateFromYear2Minute(DateTime dateTime) {
+		return dateTime.toString("yyyy-MM-dd HH:mm");
+	}
+
+	/**
+	 * 转化为年到分钟的时间格式
+	 * 
+	 * @param date
+	 * @return
+	 */
+	public static Date toDateFromYear2Minute(String date) {
+		return DateTimeFormat.forPattern("yyyy-MM-dd HH:mm")
+				.parseDateTime(date).toDate();
 	}
 
 	/**

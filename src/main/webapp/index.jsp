@@ -15,16 +15,35 @@
 <script type="text/javascript">
 var myJ=jQuery.noConflict();
 myJ(function() {
-		alert('ok');
 		var oTable = myJ('#example').dataTable({
 			"bProcessing" : true,
 			"bServerSide": true,
+			"bDeferRender": true,
+			"bFilter": true,
+			"bSort": false,
+			"bSortClasses": false,
+			"oLanguage": {"sUrl": "${app}/js/jquery/plugin/dataTables/dataTables.cn.txt" },
 			"sAjaxSource" : "example/getAjaxData.action",
 			"aoColumns" : [ {
 				"mData" : "id"
 			}, {
-				"mData" : "parentId"
-			} ]
+				"mData" : "yearFlag"
+			}, {
+				"mData" : "monthFlag"
+			} ],
+			"fnServerData": function(sSource, aoData, fnCallback, oSettings) {
+			    oSettings.jqXHR = myJ.ajax({
+			        "dataType": 'json',
+			        "type": "POST",
+			        "url": sSource,
+			        "data": aoData,
+			        "success": fnCallback
+			    });
+			},
+			"sPaginationType": "full_numbers",
+			"fnServerParams": function ( aoData ) {
+			      aoData.push( { "name": "bNeedPaging", "value": "true" } );
+			}
 		});
 });
 </script>
@@ -34,8 +53,9 @@ myJ(function() {
 		id="example">
 		<thead>
 			<tr>
-				<th width="20%">MyId</th>
-				<th width="25%">ParentId</th>
+				<th >id</th>
+				<th >yearFlag</th>
+				<th >mothFlag</th>
 			</tr>
 		</thead>
 		<tbody>

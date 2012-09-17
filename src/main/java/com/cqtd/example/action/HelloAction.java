@@ -52,21 +52,30 @@ public class HelloAction extends FooGenericAction implements ModelDriven<Foo>,
 	 * 分页查询1：普通分页查询，不使用拦截器
 	 */
 	public void getAjaxData() throws IOException {
-		logger.info("The request's encoding is:"
-				+ request.getCharacterEncoding());
-		Map<String, Object> myMap = Maps.newHashMap();
-		String iDisplayLength = request.getParameter("iDisplayLength");
-		String iDisplayStart = request.getParameter("iDisplayStart");
-		Search search = new Search();
-		search.setFirstResult(Integer.parseInt(iDisplayStart));
-		search.setMaxResults(Integer.parseInt(iDisplayLength));
-		SearchResult<Foo> searchResult = fooService.searchAndCount(search);
-		List<Foo> myList = searchResult.getResult();
-		myMap.put("aaData", myList);
-		myMap.put("iTotalRecords", searchResult.getTotalCount());
-		myMap.put("iTotalDisplayRecords", searchResult.getTotalCount());
 
-		FooUtils.printJsonObject(response, myMap);
+		Map<String, Object> myMap = Maps.newHashMap();
+		Search search = new Search();
+		List<Foo> myList = null;
+
+		if (Strings.nullToEmpty(request.getParameter("bNeedPaging")).equals(
+				"false")) {
+			myList = fooService.search(search);
+			myMap.put("aaData", myList);
+			int myCount = fooService.count(search);
+			myMap.put("iTotalRecords", myCount);
+			myMap.put("iTotalDisplayRecords", myCount);
+		} else {
+			String iDisplayLength = request.getParameter("iDisplayLength");
+			String iDisplayStart = request.getParameter("iDisplayStart");
+			search.setFirstResult(Integer.parseInt(iDisplayStart));
+			search.setMaxResults(Integer.parseInt(iDisplayLength));
+			SearchResult<Foo> searchResult = fooService.searchAndCount(search);
+			myList = searchResult.getResult();
+			myMap.put("aaData", myList);
+			myMap.put("iTotalRecords", searchResult.getTotalCount());
+			myMap.put("iTotalDisplayRecords", searchResult.getTotalCount());
+		}
+		FooUtils.printJsonObjectSerializeNulls(response, myMap);
 	}
 
 	/**
@@ -132,24 +141,24 @@ public class HelloAction extends FooGenericAction implements ModelDriven<Foo>,
 	 * easyUi list
 	 */
 	public void easyUiList() throws Exception {
-		//注释点最原始的分页方式
-//		String pageStr = request.getParameter("page");
-//		String rowsStr = request.getParameter("rows");
-//		int page = Integer.parseInt(pageStr);
-//		int rows = Integer.parseInt(rowsStr);
-//		Search search = new Search();
-//		
-//		search.setFirstResult((page-1)*rows);
-//		search.setMaxResults(rows);
-//		SearchResult<Foo> searchResult = fooService.searchAndCount(search);
-//		List<Foo> myList = searchResult.getResult();
-//		
-//		Map<String, Object> myMap = Maps.newHashMap();
-//		myMap.put("total", searchResult.getTotalCount()); //总条数
-//		myMap.put("rows", myList);
-//		FooUtils.printJsonObjectSerializeNulls(response, myMap);
-		
-		//分页公用方法调用
+		// 注释点最原始的分页方式
+		// String pageStr = request.getParameter("page");
+		// String rowsStr = request.getParameter("rows");
+		// int page = Integer.parseInt(pageStr);
+		// int rows = Integer.parseInt(rowsStr);
+		// Search search = new Search();
+		//
+		// search.setFirstResult((page-1)*rows);
+		// search.setMaxResults(rows);
+		// SearchResult<Foo> searchResult = fooService.searchAndCount(search);
+		// List<Foo> myList = searchResult.getResult();
+		//
+		// Map<String, Object> myMap = Maps.newHashMap();
+		// myMap.put("total", searchResult.getTotalCount()); //总条数
+		// myMap.put("rows", myList);
+		// FooUtils.printJsonObjectSerializeNulls(response, myMap);
+
+		// 分页公用方法调用
 		FooUtils.printJsonObjectSerializeNulls(response,
 				fooService.searchPaginated(Foo.class));
 	}

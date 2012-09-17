@@ -4,12 +4,9 @@ import org.apache.struts2.json.annotations.JSON;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.cqtd.common.base.action.FooGenericAction;
-import com.cqtd.common.base.global.GlobalConstant;
 import com.cqtd.system.model.SystemUser;
 import com.cqtd.system.service.PasswordEncoder;
 import com.cqtd.system.service.SystemUserService;
-import com.google.common.base.Strings;
-import com.googlecode.genericdao.search.Search;
 
 /**
  * Description: Copyright: Copyright (c)2012 Company: CQTD
