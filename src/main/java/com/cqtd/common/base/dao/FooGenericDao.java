@@ -14,13 +14,14 @@ import com.googlecode.genericdao.search.SearchResult;
  * reason for having this class.
  * 
  * <p>
- * The
+ * The  
  * 
  * @Autowired annotation tells Spring to inject the sessionFactory bean into
  *            this setter method.
  * 
  * @author Steve
  */
+@SuppressWarnings("rawtypes")
 public interface FooGenericDao<T, ID extends Serializable> extends
 		GenericDAO<T, ID> {
 	/**
@@ -32,5 +33,40 @@ public interface FooGenericDao<T, ID extends Serializable> extends
 
 	public <RT> SearchResult<RT> searchAndCount(
 			FooGenericSearch fooGenericSearch);
+	
+	//------------------------- HQL ------------------------------------------
+	/**
+	 * 使用HQL语句增、删、改实体对象
+	 */
+	public int bulkUpdateByHql(String hql);
+	
+	/**
+	 * 使用带参数的HQL语句增、删、改实体对象
+	 */
+	public int bulkUpdateByHql(String hql, Object[] values);
+	
+	/**
+     * 使用HQL语句检索数据
+     */
+	public List findByHql(String hql);
 
+	/**
+     * 使用带参数的HQL语句检索数据
+     */
+    public List findByHql(String hql, Object[] values);
+    
+    /**
+     * 使用带参数的HQL语句检索数据
+     */
+    public List findByHql(String hql, List values);
+    
+    /**
+     * 使用带可变参数的HQL语句检索数据
+     */
+    public List findByHqlVarParams(String hql, Object... values);
+
+    /**
+     * 使用带命名参数的HQL语句检索数据
+     */
+    public List findByNamedParam(String hql, String[] paramNames,Object[] values);
 }
