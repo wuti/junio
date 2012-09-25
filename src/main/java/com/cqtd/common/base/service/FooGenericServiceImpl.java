@@ -9,7 +9,6 @@ import org.slf4j.LoggerFactory;
 
 import com.cqtd.common.base.dao.FooGenericDao;
 import com.cqtd.common.base.pojo.FooGenericSearch;
-import com.cqtd.common.util.StaticMethod;
 import com.googlecode.genericdao.search.ExampleOptions;
 import com.googlecode.genericdao.search.Filter;
 import com.googlecode.genericdao.search.ISearch;
@@ -160,8 +159,7 @@ public class FooGenericServiceImpl<T> implements FooGenericService<T> {
 			} else if (clause.indexOf("sort") != -1) {
 				Sort sort = new Sort();
 				sort.setProperty(clauseValue);
-				String order = StaticMethod.getValue(requestMap, "order")
-						.toString();
+				String order = requestMap.get("order").toString();
 				if ("desc".equals(order)) {
 					sort.setDesc(true);
 				} else {
