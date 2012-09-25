@@ -1,7 +1,6 @@
 package com.cqtd.common.base.service;
 
 import java.util.List;
-import java.util.Map;
 
 import com.cqtd.common.base.pojo.FooGenericSearch;
 import com.googlecode.genericdao.search.ExampleOptions;
@@ -190,18 +189,5 @@ public interface FooGenericService<T> {
 	 * options.
 	 */
 	public Filter getFilterFromExample(T example, ExampleOptions options);
-
-	/**
-	 * 分页查询
-	 */
-	public Map<String, Object> searchPaginated();
-
-	/**
-	 * 分页查询
-	 * 
-	 * @param calzz
-	 *            ,构造search的类
-	 */
-	public Map<String, Object> searchPaginated(Class<?> clazz);
 
 }

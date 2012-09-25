@@ -8,10 +8,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.cqtd.common.base.dao.FooGenericDao;
-import com.cqtd.common.base.global.SystemContext;
 import com.cqtd.common.base.pojo.FooGenericSearch;
 import com.cqtd.common.util.StaticMethod;
-import com.google.common.collect.Maps;
 import com.googlecode.genericdao.search.ExampleOptions;
 import com.googlecode.genericdao.search.Filter;
 import com.googlecode.genericdao.search.ISearch;
@@ -124,26 +122,6 @@ public class FooGenericServiceImpl<T> implements FooGenericService<T> {
 
 	public T searchUnique(ISearch search) {
 		return fooGenericDao.searchUnique(search);
-	}
-
-	/**
-	 * 分页查询
-	 */
-	public Map<String, Object> searchPaginated() {
-		Map<String, Object> pageResult = Maps.newHashMap();
-		Map<String, Object> params = SystemContext.getPageParams();
-		int pageStart = SystemContext.getPageStart();
-		int pageSize = SystemContext.getPageSize();
-		Search search = new Search();
-		search.setFirstResult(pageStart);
-		search.setMaxResults(pageSize);
-		search = getSqlFromRequestMap(params, search);
-		SearchResult<T> searchResult = searchAndCount(search);
-		List<T> list = searchResult.getResult();
-		pageResult.put("aaData", list);
-		pageResult.put("iTotalRecords", searchResult.getTotalCount());
-		pageResult.put("iTotalDisplayRecords", searchResult.getTotalCount());
-		return pageResult;
 	}
 
 	/**
@@ -323,22 +301,6 @@ public class FooGenericServiceImpl<T> implements FooGenericService<T> {
 			}
 		}
 		return listSearch;
-	}
-
-	public Map<String, Object> searchPaginated(Class<?> clazz) {
-		Map<String, Object> pageResult = Maps.newHashMap();
-		Map<String, Object> params = SystemContext.getPageParams();
-		int pageStart = SystemContext.getPageStart();
-		int pageSize = SystemContext.getPageSize();
-		Search search = new Search(clazz);
-		search.setFirstResult((pageStart - 1) * pageSize);
-		search.setMaxResults(pageSize);
-		search = getSqlFromRequestMap(params, search);
-		SearchResult<T> searchResult = searchAndCount(search);
-		List<T> list = searchResult.getResult();
-		pageResult.put("rows", list);
-		pageResult.put("total", searchResult.getTotalCount());
-		return pageResult;
 	}
 
 }

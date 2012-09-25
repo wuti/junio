@@ -62,4 +62,5 @@ myJ(function() {
 		</tbody>
 	</table>
 </body>
+<input id="button"' type="submit" class="smallButton" value="click" />
 </html>

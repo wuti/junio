@@ -79,14 +79,6 @@ public class HelloAction extends FooGenericAction implements ModelDriven<Foo>,
 	}
 
 	/**
-	 * 分页查询2：带拦截器的分页查询
-	 */
-	public void findList() throws IOException {
-		FooUtils.printJsonObject(response,
-				fooService.searchPaginated(Foo.class));
-	}
-
-	/**
 	 * 新增
 	 */
 	public void add() throws IOException {
@@ -95,19 +87,6 @@ public class HelloAction extends FooGenericAction implements ModelDriven<Foo>,
 		System.out.println(text);
 		System.out.println(href);
 		FooUtils.printJsonSuccessMsg(response);
-	}
-
-	/**
-	 * 使用struts2-json-plugin.jar插件 ，原jsonplugin.jar不能再继续使用，见如下原因 JSON Plugin The
-	 * JSON plugin is bundled with Struts since 2.1.7+. The plugin at Google
-	 * Code has been deprecated
-	 * struts2-json-plugin与gson的区别于如果有个属性为null，gson不会返回此属性而struts2
-	 * -json-plugin会返回 "属性":null, 这样datatables插件就不会报警告
-	 */
-	public String jsonList() {
-		jsonList = fooService.searchPaginated(Foo.class);
-		System.out.println(jsonList);
-		return SUCCESS;
 	}
 
 	/**
@@ -135,32 +114,6 @@ public class HelloAction extends FooGenericAction implements ModelDriven<Foo>,
 		myMap.put("totalPage", 13); // 需要计算 总页数
 
 		FooUtils.printJsonObject(response, myMap);
-	}
-
-	/**
-	 * easyUi list
-	 */
-	public void easyUiList() throws Exception {
-		// 注释点最原始的分页方式
-		// String pageStr = request.getParameter("page");
-		// String rowsStr = request.getParameter("rows");
-		// int page = Integer.parseInt(pageStr);
-		// int rows = Integer.parseInt(rowsStr);
-		// Search search = new Search();
-		//
-		// search.setFirstResult((page-1)*rows);
-		// search.setMaxResults(rows);
-		// SearchResult<Foo> searchResult = fooService.searchAndCount(search);
-		// List<Foo> myList = searchResult.getResult();
-		//
-		// Map<String, Object> myMap = Maps.newHashMap();
-		// myMap.put("total", searchResult.getTotalCount()); //总条数
-		// myMap.put("rows", myList);
-		// FooUtils.printJsonObjectSerializeNulls(response, myMap);
-
-		// 分页公用方法调用
-		FooUtils.printJsonObjectSerializeNulls(response,
-				fooService.searchPaginated(Foo.class));
 	}
 
 	public void easyuiAdd() throws Exception {
