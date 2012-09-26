@@ -57,6 +57,8 @@ public class HelloAction extends FooGenericAction implements ModelDriven<Foo>,
 		Search search = new Search();
 		List<Foo> myList = null;
 
+		fooService.removeById("402881e4343d1a8101343d1ac89c0001");
+
 		if (Strings.nullToEmpty(request.getParameter("bNeedPaging")).equals(
 				"false")) {
 			myList = fooService.search(search);
