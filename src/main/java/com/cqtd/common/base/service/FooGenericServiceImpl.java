@@ -119,9 +119,6 @@ public class FooGenericServiceImpl<T> implements FooGenericService<T> {
 		return fooGenericDao.searchAndCount(search);
 	}
 
-	public T searchUnique(ISearch search) {
-		return fooGenericDao.searchUnique(search);
-	}
 
 	/**
 	 * 拼接查询条件的泛型方法

@@ -142,7 +142,6 @@ public interface FooGenericService<T> {
 	 *            The result type is automatically determined by the context in
 	 *            which the method is called.
 	 */
-	public T searchUnique(ISearch search);
 
 	/**
 	 * Returns the total number of results that would be returned using the
