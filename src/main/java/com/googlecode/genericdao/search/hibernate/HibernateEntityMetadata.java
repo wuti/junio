@@ -63,11 +63,13 @@ public class HibernateEntityMetadata implements Metadata {
 			return ((HibernateProxy) object).getHibernateLazyInitializer()
 					.getIdentifier();
 		} else {
+			// Modify by Steve
 			return metadata.getIdentifier(object, null);
 		}
 	}
 
 	public Class<?> getJavaClass() {
+		// Modify by Steve
 		return metadata.getMappedClass();
 		// return metadata.getMappedClass(EntityMode.POJO);
 	}
@@ -102,7 +104,7 @@ public class HibernateEntityMetadata implements Metadata {
 	}
 
 	public Object getPropertyValue(Object object, String property) {
-
+		// Modify by Steve
 		return metadata.getPropertyValue(object, property);
 
 		// if (getIdProperty().equals(property))
