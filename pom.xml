@@ -155,16 +155,6 @@
 			<version>3.8</version>
 		</dependency>
 		<dependency>
-			<groupId>org.slf4j</groupId>
-			<artifactId>slf4j-api</artifactId>
-			<version>1.6.6</version>
-		</dependency>
-		<dependency>
-			<groupId>org.slf4j</groupId>
-			<artifactId>slf4j-simple</artifactId>
-			<version>1.6.6</version>
-		</dependency>
-		<dependency>
 			<groupId>org.apache.struts</groupId>
 			<artifactId>struts2-core</artifactId>
 			<version>2.3.4.1</version>
@@ -189,6 +179,16 @@
 			<artifactId>guava</artifactId>
 			<version>13.0.1</version>
 		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+			<version>1.7.1</version>
+		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-simple</artifactId>
+			<version>1.7.1</version>
+		</dependency>
 	</dependencies>
 	<description>A fresh ssh construct.</description>
 	<organization>
@@ -198,12 +198,12 @@
 		<plugins>
 			<plugin>
 				<artifactId>maven-site-plugin</artifactId>
-				<version>3.0-beta-3</version>
+				<version>3.1</version>
 				<configuration></configuration>
 			</plugin>
 			<plugin>
 				<artifactId>maven-javadoc-plugin</artifactId>
-				<version>2.7</version>
+				<version>2.9</version>
 				<configuration></configuration>
 			</plugin>
 			<plugin>
@@ -219,7 +219,8 @@
 				<artifactId>maven-resources-plugin</artifactId>
 				<version>2.5</version>
 				<configuration>
-					<outputDirectory>${basedir}/src/main/webapp/WEB-INF/classes</outputDirectory>
+					<outputDirectory>${basedir}/target/classes</outputDirectory>
+					<!-- <outputDirectory>${basedir}/src/main/webapp/WEB-INF/classes</outputDirectory> -->
 					<source>1.6</source>
 					<target>1.6</target>
 					<encoding>UTF-8</encoding>
