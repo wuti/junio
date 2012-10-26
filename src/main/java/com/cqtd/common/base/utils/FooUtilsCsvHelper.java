@@ -38,6 +38,9 @@ public class FooUtilsCsvHelper {
 		Files.write(Bytes.concat(commonCsvHead,
 				sbBuilder.toString().getBytes(Charsets.UTF_8.toString())),
 				new File("d:\\/123.csv"));
+		// When write to response, you should use the following:
+		// response.setHeader("Content-Disposition", "attachment;filename="
+		// + new String(fileName.getBytes("UTF-8"), "ISO8859-1"));
 	}
 
 	/**
