@@ -4,21 +4,26 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.reflect.InvocationTargetException;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
+import org.apache.struts2.ServletActionContext;
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
+import org.springframework.web.context.support.WebApplicationContextUtils;
 
 import com.google.common.base.Charsets;
 import com.google.common.base.Preconditions;
@@ -29,6 +34,125 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 public class FooUtils {
+
+	public static HttpServletRequest setAttributesForRequest(
+			HttpServletRequest request) {
+		String clause;
+		String clauseValue;
+		@SuppressWarnings("unchecked")
+		Map<String, String[]> requestMap = request.getParameterMap();
+		for (String mapKey : requestMap.keySet()) {
+			// This operation is safe, view j2ee5 API please.
+			clauseValue = (requestMap.get(mapKey))[0];
+			if (clauseValue.trim().equals("")) {
+				continue;
+			} else if (mapKey.indexOf("RequestScope") != -1) {
+				clause = mapKey.substring(0, mapKey.indexOf("RequestScope"));
+				request.setAttribute(clause, clauseValue);
+			} else {
+
+			}
+		}
+		return request;
+	}
+
+	/**
+	 * This is useful for lower vesion struts1
+	 * 
+	 * @param <T>
+	 * @param clazz
+	 * @return
+	 */
+	@SuppressWarnings("unchecked")
+	public static <T> T getBean(Class<T> clazz) {
+
+		String beanNamePrex = clazz.getSimpleName().substring(0, 1)
+				.toLowerCase()
+				+ clazz.getSimpleName().substring(1,
+						clazz.getSimpleName().length());
+		try {
+			// return new ClassPathXmlApplicationContext(
+			// "applicationContext.xml").getBean(clazz);
+			return (T) WebApplicationContextUtils
+					.getRequiredWebApplicationContext(
+							ServletActionContext.getServletContext()).getBean(
+							beanNamePrex);
+		} catch (Exception e) {
+			System.out.println("Bean definition not exist");
+			e.printStackTrace();
+			return null;
+		}
+	}
+
+	/**
+	 * Autofill requestBean, this method is more effective and reliable because
+	 * of make use of org.apache.commons.beanutils
+	 * 
+	 * Keep up of: org.apache.commons.beanutils
+	 * 
+	 */
+	public static <T> T setBeanFromRequestMap(T t,
+			Map<String, String[]> requestMap) throws IllegalAccessException,
+			InvocationTargetException, NoSuchMethodException {
+
+		String paraName;
+		String paraValue;
+
+		for (Object keyObject : requestMap.keySet()) {
+			paraName = String.valueOf(keyObject);
+			// This operation is safe, view j2ee5 API please.
+			paraValue = ((String[]) requestMap.get(paraName))[0].toString();
+			if (PropertyUtils.isWriteable(t, paraName)) {
+				PropertyUtils.setProperty(t, paraName, paraValue);
+				continue;
+			}
+		}
+		return (T) t;
+	}
+
+	/**
+	 * 
+	 * Construct search sql from the requestMap
+	 * 
+	 * Map类型为：Map<String, String[]>
+	 * 
+	 * @param requestMap
+	 * @return
+	 */
+	public static String getSqlFromRequestMap(Map<String, String[]> requestMap) {
+		String clause;
+		String clauseValue;
+		StringBuilder sb = new StringBuilder();
+		for (Object keyObject : requestMap.keySet()) {
+			clause = String.valueOf(keyObject);
+			// This operation is safe, view j2ee5 API please.
+			clauseValue = ((String[]) requestMap.get(clause))[0].toString();
+			if (clauseValue.equals("")) {
+				continue;
+			} else if (clause.indexOf("StringEqual") != -1) {
+				clause = clause.substring(0, clause.indexOf("StringEqual"));
+				sb.append(" and " + clause + " ='" + clauseValue.trim() + "' ");
+			} else if (clause.indexOf("StringLike") != -1) {
+				clause = clause.substring(0, clause.indexOf("StringLike"));
+				sb.append(" and " + clause + " like '%" + clauseValue.trim()
+						+ "%' ");
+			} else if (clause.indexOf("DateGreaterThan") != -1) {
+				clause = clause.substring(0, clause.indexOf("DateGreaterThan"));
+				sb.append(" and " + clause + " >= to_date('"
+						+ clauseValue.trim() + "','yyyy-mm-dd hh24:mi:ss') ");
+			} else if (clause.indexOf("DateLessThan") != -1) {
+				clause = clause.substring(0, clause.indexOf("DateLessThan"));
+				sb.append(" and " + clause + " <= to_date('"
+						+ clauseValue.trim() + "','yyyy-mm-dd hh24:mi:ss') ");
+			} else if (clause.indexOf("SortOrder") != -1) {
+				sb.append(" " + clause + " <= '" + clauseValue.trim() + "' ");
+			} else {
+
+			}
+		}
+		return sb.toString();
+	}
+
 	/**
 	 * 转化为年到秒的时间格式
 	 * 
