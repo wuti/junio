@@ -2,6 +2,8 @@ package com.cqtd.common.base.service;
 
 import java.util.List;
 
+import org.springframework.scheduling.annotation.Scheduled;
+
 import com.cqtd.common.base.pojo.FooGenericSearch;
 import com.googlecode.genericdao.search.ExampleOptions;
 import com.googlecode.genericdao.search.Filter;
