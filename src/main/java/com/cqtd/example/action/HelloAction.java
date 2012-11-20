@@ -53,6 +53,9 @@ public class HelloAction extends FooGenericAction implements ModelDriven<Foo>,
 	 */
 	public void getAjaxData() throws IOException {
 
+		
+		System.out.println("enter");
+		
 		Map<String, Object> myMap = Maps.newHashMap();
 		Search search = new Search();
 		List<Foo> myList = null;
