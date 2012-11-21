@@ -22,8 +22,10 @@
 			expression=".*dao" />
 	</context:component-scan>
 
-	<context:property-placeholder location="classpath:target-mysql.properties" />
-
+	<context:property-placeholder location="classpath:target-oracle.properties" />
+	<!-- 
+		<context:property-placeholder location="classpath:target-mysql.properties" />
+	 -->
 
 	<task:annotation-driven executor="myExecutor" scheduler="myScheduler" />
 	<task:executor id="myExecutor" pool-size="50" />

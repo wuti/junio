@@ -16,7 +16,7 @@ public class FooServiceImpl extends FooGenericServiceImpl<Foo> implements
 		setFooGenericDao(fooDao);
 	}
 
-	@Scheduled(fixedDelay = 5000)
+	@Scheduled(fixedDelay = 60000)
 	@Override
 	public void doJob() {
 		System.out.println("fuck");
