@@ -1,4 +1,3 @@
-cqtd
+fooGeneric
 ====
-
-To present our ERP-demo only. Since 12,2011
+A total generic dao for hibernate3 and hibernate4
