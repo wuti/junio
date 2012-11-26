@@ -1,43 +1,14 @@
-/* Copyright 2009 The Revere Group
- * 
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- * 
- *     http://www.apache.org/licenses/LICENSE-2.0
- * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-package com.googlecode.genericdao.dao.hibernate;
+package com.foo.common.base.service;
 
-import java.io.Serializable;
 import java.util.List;
 
+import com.foo.common.base.pojo.FooGenericSearch;
 import com.googlecode.genericdao.search.ExampleOptions;
 import com.googlecode.genericdao.search.Filter;
 import com.googlecode.genericdao.search.ISearch;
 import com.googlecode.genericdao.search.SearchResult;
 
-/**
- * Interface for a Data Access Object that can be used for a single specified
- * type domain object. A single instance implementing this interface can be used
- * only for the type of domain object specified in the type parameters.
- * 
- * @author dwolverton
- * 
- * @param <T>
- *            The type of the domain object for which this instance is to be
- *            used.
- * @param <ID>
- *            The type of the id of the domain object for which this instance is
- *            to be used.
- */
-
-public interface GenericDAO<T, ID extends Serializable> {
+public interface FooGenericService<T> {
 
 	/**
 	 * <p>
@@ -46,13 +17,13 @@ public interface GenericDAO<T, ID extends Serializable> {
 	 * <p>
 	 * If none is found, return null.
 	 */
-	public T find(ID id);
+	public T find(String id);
 
 	/**
 	 * Get all entities of the specified type from the datastore that have one
 	 * of these ids.
 	 */
-	public T[] find(ID... ids);
+	public T[] find(String... ids);
 
 	/**
 	 * <p>
@@ -68,7 +39,7 @@ public interface GenericDAO<T, ID extends Serializable> {
 	 * @throws a
 	 *             HibernateException if no matching entity is found
 	 */
-	public T getReference(ID id);
+	public T getReference(String id);
 
 	/**
 	 * <p>
@@ -85,7 +56,7 @@ public interface GenericDAO<T, ID extends Serializable> {
 	 *             HibernateException if any of the matching entities are not
 	 *             found.
 	 */
-	public T[] getReferences(ID... ids);
+	public T[] getReferences(String... ids);
 
 	/**
 	 * <p>
@@ -131,18 +102,23 @@ public interface GenericDAO<T, ID extends Serializable> {
 	public void remove(T... entities);
 
 	/**
+	 * Remove all of the specified entities from the datastore.
+	 */
+	public void remove(List<T> entities);
+
+	/**
 	 * Remove the entity with the specified type and id from the datastore.
 	 * 
 	 * @return <code>true</code> if the entity is found in the datastore and
 	 *         removed, <code>false</code> if it is not found.
 	 */
-	public boolean removeById(ID id);
+	public boolean removeById(String id);
 
 	/**
 	 * Remove all the entities of the given type from the datastore that have
 	 * one of these ids.
 	 */
-	public void removeByIds(ID... ids);
+	public void removeByIds(String... ids);
 
 	/**
 	 * Get a list of all the objects of the specified type.
@@ -153,20 +129,20 @@ public interface GenericDAO<T, ID extends Serializable> {
 	 * Search for entities given the search parameters in the specified
 	 * <code>ISearch</code> object.
 	 * 
-	 * @param RT
+	 * @param T
 	 *            The result type is automatically determined by the context in
 	 *            which the method is called.
 	 */
-	public <RT> List<RT> search(ISearch search);
+	public List<T> search(ISearch search);
 
 	/**
 	 * Search for a single entity using the given parameters.
 	 * 
-	 * @param RT
+	 * @param T
 	 *            The result type is automatically determined by the context in
 	 *            which the method is called.
 	 */
-	public <RT> RT searchUnique(ISearch search);
+	public T searchUnique(ISearch search);
 
 	/**
 	 * Returns the total number of results that would be returned using the
@@ -179,11 +155,13 @@ public interface GenericDAO<T, ID extends Serializable> {
 	 * results like <code>search()</code> and the total length like
 	 * <code>count()</code>.
 	 * 
-	 * @param RT
+	 * @param T
 	 *            The result type is automatically determined by the context in
 	 *            which the method is called.
 	 */
-	public <RT> SearchResult<RT> searchAndCount(ISearch search);
+	public SearchResult<T> searchAndCount(ISearch search);
+
+	public SearchResult<T> searchAndCount(FooGenericSearch search);
 
 	/**
 	 * Returns <code>true</code> if the object is connected to the current
@@ -212,22 +190,4 @@ public interface GenericDAO<T, ID extends Serializable> {
 	 */
 	public Filter getFilterFromExample(T example, ExampleOptions options);
 
-	/**
-	 * Remove all of the specified entities from the datastore.
-	 */
-	public void remove(List<T> entities);
-
-	/**
-	 * Save all of the specified entities from the datastore.
-	 */
-	public boolean[] save(List<T> entities);
-
-	/**
-	 * A hql searching
-	 * 
-	 * @param <RT>
-	 * @param fooGenericSearch
-	 * @return
-	 */
-	public <RT> SearchResult<RT> searchAndCount(GenericSearch fooGenericSearch);
 }

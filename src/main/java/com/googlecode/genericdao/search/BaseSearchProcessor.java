@@ -1163,7 +1163,7 @@ public abstract class BaseSearchProcessor {
 					return null;
 
 				if (filter.getOperator() == Filter.OP_CUSTOM) {
-					if (filter.getProperty() == null || filter.getProperty().isEmpty()) {
+					if (filter.getProperty() == null || filter.getProperty().equals("")) {
 						 throw new IllegalArgumentException("This search has a custom filter with no expression specified.");
 					}
 				} else if (!filter.isTakesNoProperty()) {

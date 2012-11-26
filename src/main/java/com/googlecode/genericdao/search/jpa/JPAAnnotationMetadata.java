@@ -72,7 +72,7 @@ public class JPAAnnotationMetadata implements Metadata {
 		if (annotation == null) {
 			throw new UnsupportedOperationException("Cannot get Entity Name of non-entity type.");
 		} else {
-			if (annotation.name() != null && !annotation.name().isEmpty()) {
+			if (annotation.name() != null && !annotation.name().equals("")) {
 				return annotation.name();
 			} else {
 				return klass.getSimpleName();

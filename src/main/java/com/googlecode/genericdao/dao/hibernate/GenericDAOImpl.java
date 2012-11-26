@@ -17,6 +17,9 @@ package com.googlecode.genericdao.dao.hibernate;
 import java.io.Serializable;
 import java.util.List;
 
+import org.hibernate.Query;
+
+import com.google.common.base.Preconditions;
 import com.googlecode.genericdao.dao.DAOUtil;
 import com.googlecode.genericdao.search.ExampleOptions;
 import com.googlecode.genericdao.search.Filter;
@@ -25,8 +28,8 @@ import com.googlecode.genericdao.search.Search;
 import com.googlecode.genericdao.search.SearchResult;
 
 /**
- * Implementation of <code>GenericDAO</code> using Hibernate.
- * The SessionFactory property is annotated for automatic resource injection.
+ * Implementation of <code>GenericDAO</code> using Hibernate. The SessionFactory
+ * property is annotated for automatic resource injection.
  * 
  * @author dwolverton
  * 
@@ -41,7 +44,8 @@ import com.googlecode.genericdao.search.SearchResult;
 public class GenericDAOImpl<T, ID extends Serializable> extends
 		HibernateBaseDAO implements GenericDAO<T, ID> {
 
-	protected Class<T> persistentClass = (Class<T>) DAOUtil.getTypeArguments(GenericDAOImpl.class, this.getClass()).get(0);
+	protected Class<T> persistentClass = (Class<T>) DAOUtil.getTypeArguments(
+			GenericDAOImpl.class, this.getClass()).get(0);
 
 	public int count(ISearch search) {
 		if (search == null)
@@ -49,11 +53,11 @@ public class GenericDAOImpl<T, ID extends Serializable> extends
 		return _count(persistentClass, search);
 	}
 
-	public T find(Serializable id) {
+	public T find(ID id) {
 		return _get(persistentClass, id);
 	}
 
-	public T[] find(Serializable... ids) {
+	public T[] find(ID... ids) {
 		return _get(persistentClass, ids);
 	}
 
@@ -65,11 +69,11 @@ public class GenericDAOImpl<T, ID extends Serializable> extends
 		_flush();
 	}
 
-	public T getReference(Serializable id) {
+	public T getReference(ID id) {
 		return _load(persistentClass, id);
 	}
 
-	public T[] getReferences(Serializable... ids) {
+	public T[] getReferences(ID... ids) {
 		return _load(persistentClass, ids);
 	}
 
@@ -89,11 +93,11 @@ public class GenericDAOImpl<T, ID extends Serializable> extends
 		_deleteEntities(entities);
 	}
 
-	public boolean removeById(Serializable id) {
+	public boolean removeById(ID id) {
 		return _deleteById(persistentClass, id);
 	}
 
-	public void removeByIds(Serializable... ids) {
+	public void removeByIds(ID... ids) {
 		_deleteById(persistentClass, ids);
 	}
 
@@ -131,5 +135,30 @@ public class GenericDAOImpl<T, ID extends Serializable> extends
 
 	public Filter getFilterFromExample(T example, ExampleOptions options) {
 		return _getFilterFromExample(example, options);
-	}	
+	}
+
+	public <RT> SearchResult<RT> searchAndCount(
+			GenericSearch fooGenericSearch) {
+		Preconditions.checkNotNull(fooGenericSearch);
+		SearchResult<RT> result = new SearchResult<RT>();
+
+		Integer total = (Integer) getSession()
+				.createQuery(fooGenericSearch.getCountHql()).iterate().next();
+
+		Query query = getSession().createQuery(fooGenericSearch.getQueryHql());
+		query.setFirstResult(fooGenericSearch.getFirstResult());
+		query.setMaxResults(fooGenericSearch.getMaxResults());
+
+		result.setTotalCount(total.intValue());
+		result.setResult(query.list());
+		return result;
+	}
+
+	public void remove(List<T> entities) {
+		remove((T[]) entities.toArray());
+	}
+
+	public boolean[] save(List<T> entities) {
+		return save((T[]) entities.toArray());
+	}
 }

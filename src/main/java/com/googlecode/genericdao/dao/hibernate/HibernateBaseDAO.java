@@ -21,6 +21,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import net.sf.ehcache.hibernate.HibernateUtil;
+
 import org.hibernate.Criteria;
 import org.hibernate.NonUniqueResultException;
 import org.hibernate.Query;
@@ -53,8 +55,10 @@ public class HibernateBaseDAO {
 
 	public void setSessionFactory(SessionFactory sessionFactory) {
 		this.sessionFactory = sessionFactory;
-		searchProcessor = HibernateSearchProcessor.getInstanceForSessionFactory(sessionFactory);
-		metadataUtil = HibernateMetadataUtil.getInstanceForSessionFactory(sessionFactory);
+		searchProcessor = HibernateSearchProcessor
+				.getInstanceForSessionFactory(sessionFactory);
+		metadataUtil = HibernateMetadataUtil
+				.getInstanceForSessionFactory(sessionFactory);
 	}
 
 	protected SessionFactory getSessionFactory() {
@@ -153,19 +157,23 @@ public class HibernateBaseDAO {
 	 */
 	protected boolean _saveOrUpdateIsNew(Object entity) {
 		if (entity == null)
-			throw new IllegalArgumentException("attempt to saveOrUpdate with null entity");
+			throw new IllegalArgumentException(
+					"attempt to saveOrUpdate with null entity");
 
-		Serializable id = getMetadataUtil().getId(entity);
-		if (getSession().contains(entity))
-			return false;
-
-		if (id == null || (new Long(0)).equals(id) || !_exists(entity)) {
-			_save(entity);
-			return true;
-		} else {
-			_update(entity);
-			return false;
-		}
+		getSession().saveOrUpdate(entity);
+		return true;
+		// Serializable id = getMetadataUtil().getId(entity);
+		// Serializable id = getSession().getIdentifier(entity);
+		// if (getSession().contains(entity))
+		// return false;
+		//
+		// if (id == null || (new Long(0)).equals(id) || !_exists(entity)) {
+		// _save(entity);
+		// return true;
+		// } else {
+		// _update(entity);
+		// return false;
+		// }
 	}
 
 	/**
@@ -185,7 +193,8 @@ public class HibernateBaseDAO {
 		// it does not exist
 		for (int i = 0; i < entities.length; i++) {
 			if (entities[i] == null) {
-				throw new IllegalArgumentException("attempt to saveOrUpdate with null entity");
+				throw new IllegalArgumentException(
+						"attempt to saveOrUpdate with null entity");
 			}
 			if (getSession().contains(entities[i])) {
 				exists[i] = true;
@@ -201,7 +210,9 @@ public class HibernateBaseDAO {
 		Map<Class<?>, List<Integer>> mayExist = new HashMap<Class<?>, List<Integer>>();
 		for (int i = 0; i < entities.length; i++) {
 			if (exists[i] == null) {
-				Class<?> entityClass = metadataUtil.getUnproxiedClass(entities[i]); //Get the real entity class
+				Class<?> entityClass = metadataUtil
+						.getUnproxiedClass(entities[i]); // Get the real entity
+															// class
 				List<Integer> l = mayExist.get(entityClass);
 				if (l == null) {
 					l = new ArrayList<Integer>();
@@ -216,7 +227,8 @@ public class HibernateBaseDAO {
 		for (Map.Entry<Class<?>, List<Integer>> entry : mayExist.entrySet()) {
 			Serializable[] ids = new Serializable[entry.getValue().size()];
 			for (int i = 0; i < ids.length; i++) {
-				ids[i] = getMetadataUtil().getId(entities[entry.getValue().get(i)]);
+				ids[i] = getMetadataUtil().getId(
+						entities[entry.getValue().get(i)]);
 			}
 			boolean exists2[] = _exists(entry.getKey(), ids);
 			for (int i = 0; i < ids.length; i++) {
@@ -269,7 +281,8 @@ public class HibernateBaseDAO {
 	 */
 	protected boolean _deleteById(Class<?> type, Serializable id) {
 		if (id != null) {
-			type = metadataUtil.getUnproxiedClass(type); //Get the real entity class
+			type = metadataUtil.getUnproxiedClass(type); // Get the real entity
+															// class
 			Object entity = getSession().get(type, id);
 			if (entity != null) {
 				getSession().delete(entity);
@@ -284,7 +297,8 @@ public class HibernateBaseDAO {
 	 * one of these ids.
 	 */
 	protected void _deleteById(Class<?> type, Serializable... ids) {
-		type = metadataUtil.getUnproxiedClass(type); //Get the real entity class
+		type = metadataUtil.getUnproxiedClass(type); // Get the real entity
+														// class
 		Criteria c = getSession().createCriteria(type);
 		c.add(Restrictions.in("id", ids));
 		for (Object entity : c.list()) {
@@ -299,17 +313,20 @@ public class HibernateBaseDAO {
 	 *         removed, <code>false</code> if the item is not found.
 	 */
 	protected boolean _deleteEntity(Object entity) {
+
 		if (entity != null) {
 			Serializable id = getMetadataUtil().getId(entity);
 			if (id != null) {
-				entity = getSession().get(metadataUtil.getUnproxiedClass(entity), id);
+				entity = getSession().get(
+						metadataUtil.getUnproxiedClass(entity), id);
 				if (entity != null) {
 					getSession().delete(entity);
 					return true;
 				}
 			}
 		}
-		return false;
+		// getSession().delete(entity);
+		return true;
 	}
 
 	/**
@@ -328,7 +345,8 @@ public class HibernateBaseDAO {
 	 * <code>get()</code> always hits the database immediately.
 	 */
 	protected <T> T _get(Class<T> type, Serializable id) {
-		type = metadataUtil.getUnproxiedClass(type); //Get the real entity class
+		type = metadataUtil.getUnproxiedClass(type); // Get the real entity
+														// class
 		return (T) getSession().get(type, id);
 	}
 
@@ -344,7 +362,8 @@ public class HibernateBaseDAO {
 	 * <code>get()</code> always hits the database immediately.
 	 */
 	protected <T> T[] _get(Class<T> type, Serializable... ids) {
-		type = metadataUtil.getUnproxiedClass(type); //Get the real entity class
+		type = metadataUtil.getUnproxiedClass(type); // Get the real entity
+														// class
 		Criteria c = getSession().createCriteria(type);
 		c.add(Restrictions.in("id", ids));
 		Object[] retVal = (Object[]) Array.newInstance(type, ids.length);
@@ -377,7 +396,8 @@ public class HibernateBaseDAO {
 	 * if batch-size is defined for the class mapping.
 	 */
 	protected <T> T _load(Class<T> type, Serializable id) {
-		type = metadataUtil.getUnproxiedClass(type); //Get the real entity class
+		type = metadataUtil.getUnproxiedClass(type); // Get the real entity
+														// class
 		return (T) getSession().load(type, id);
 	}
 
@@ -393,7 +413,8 @@ public class HibernateBaseDAO {
 	 * @see #_load(Class, Serializable)
 	 */
 	protected <T> T[] _load(Class<T> type, Serializable... ids) {
-		type = metadataUtil.getUnproxiedClass(type); //Get the real entity class
+		type = metadataUtil.getUnproxiedClass(type); // Get the real entity
+														// class
 		Object[] retVal = (Object[]) Array.newInstance(type, ids.length);
 		for (int i = 0; i < ids.length; i++) {
 			if (ids[i] != null)
@@ -415,8 +436,10 @@ public class HibernateBaseDAO {
 	 * Get a list of all the objects of the specified class.
 	 */
 	protected <T> List<T> _all(Class<T> type) {
-		type = metadataUtil.getUnproxiedClass(type); //Get the real entity class
-		return getSession().createCriteria(type).setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY).list();
+		type = metadataUtil.getUnproxiedClass(type); // Get the real entity
+														// class
+		return getSession().createCriteria(type)
+				.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY).list();
 	}
 
 	/**
@@ -479,17 +502,20 @@ public class HibernateBaseDAO {
 
 	/**
 	 * Same as <code>_search(ISearch)</code> except that it uses the specified
-	 * search class instead of getting it from the search object. Also, if the search
-	 * object has a different search class than what is specified, an exception
-	 * is thrown.
+	 * search class instead of getting it from the search object. Also, if the
+	 * search object has a different search class than what is specified, an
+	 * exception is thrown.
 	 */
 	protected List _search(Class<?> searchClass, ISearch search) {
 		if (search == null)
 			throw new NullPointerException("Search is null.");
 		if (searchClass == null)
 			throw new NullPointerException("Search class is null.");
-		if (search.getSearchClass() != null && !search.getSearchClass().equals(searchClass))
-			throw new IllegalArgumentException("Search class does not match expected type: " + searchClass.getName());
+		if (search.getSearchClass() != null
+				&& !search.getSearchClass().equals(searchClass))
+			throw new IllegalArgumentException(
+					"Search class does not match expected type: "
+							+ searchClass.getName());
 
 		return getSearchProcessor().search(getSession(), searchClass, search);
 	}
@@ -511,17 +537,20 @@ public class HibernateBaseDAO {
 
 	/**
 	 * Same as <code>_count(ISearch)</code> except that it uses the specified
-	 * search class instead of getting it from the search object. Also, if the search
-	 * object has a different search class than what is specified, an exception
-	 * is thrown.
+	 * search class instead of getting it from the search object. Also, if the
+	 * search object has a different search class than what is specified, an
+	 * exception is thrown.
 	 */
 	protected int _count(Class<?> searchClass, ISearch search) {
 		if (search == null)
 			throw new NullPointerException("Search is null.");
 		if (searchClass == null)
 			throw new NullPointerException("Search class is null.");
-		if (search.getSearchClass() != null && !search.getSearchClass().equals(searchClass))
-			throw new IllegalArgumentException("Search class does not match expected type: " + searchClass.getName());
+		if (search.getSearchClass() != null
+				&& !search.getSearchClass().equals(searchClass))
+			throw new IllegalArgumentException(
+					"Search class does not match expected type: "
+							+ searchClass.getName());
 
 		return getSearchProcessor().count(getSession(), searchClass, search);
 	}
@@ -530,7 +559,11 @@ public class HibernateBaseDAO {
 	 * Returns the number of instances of this class in the datastore.
 	 */
 	protected int _count(Class<?> type) {
-		List counts = getSession().createQuery("select count(_it_) from " + getMetadataUtil().get(type).getEntityName() + " _it_").list();
+		List counts = getSession()
+				.createQuery(
+						"select count(_it_) from "
+								+ getMetadataUtil().get(type).getEntityName()
+								+ " _it_").list();
 		int sum = 0;
 		for (Object count : counts) {
 			sum += ((Long) count).intValue();
@@ -555,26 +588,31 @@ public class HibernateBaseDAO {
 	}
 
 	/**
-	 * Same as <code>_searchAndCount(ISearch)</code> except that it uses the specified
-	 * search class instead of getting it from the search object. Also, if the search
-	 * object has a different search class than what is specified, an exception
-	 * is thrown.
+	 * Same as <code>_searchAndCount(ISearch)</code> except that it uses the
+	 * specified search class instead of getting it from the search object.
+	 * Also, if the search object has a different search class than what is
+	 * specified, an exception is thrown.
 	 */
 	protected SearchResult _searchAndCount(Class<?> searchClass, ISearch search) {
 		if (search == null)
 			throw new NullPointerException("Search is null.");
 		if (searchClass == null)
 			throw new NullPointerException("Search class is null.");
-		if (search.getSearchClass() != null && !search.getSearchClass().equals(searchClass))
-			throw new IllegalArgumentException("Search class does not match expected type: " + searchClass.getName());
+		if (search.getSearchClass() != null
+				&& !search.getSearchClass().equals(searchClass))
+			throw new IllegalArgumentException(
+					"Search class does not match expected type: "
+							+ searchClass.getName());
 
-		return getSearchProcessor().searchAndCount(getSession(), searchClass, search);
+		return getSearchProcessor().searchAndCount(getSession(), searchClass,
+				search);
 	}
 
 	/**
 	 * Search for a single result using the given parameters.
 	 */
-	protected Object _searchUnique(ISearch search) throws NonUniqueResultException {
+	protected Object _searchUnique(ISearch search)
+			throws NonUniqueResultException {
 		if (search == null)
 			throw new NullPointerException("Search is null.");
 		if (search.getSearchClass() == null)
@@ -584,20 +622,24 @@ public class HibernateBaseDAO {
 	}
 
 	/**
-	 * Same as <code>_searchUnique(ISearch)</code> except that it uses the specified
-	 * search class instead of getting it from the search object. Also, if the search
-	 * object has a different search class than what is specified, an exception
-	 * is thrown.
+	 * Same as <code>_searchUnique(ISearch)</code> except that it uses the
+	 * specified search class instead of getting it from the search object.
+	 * Also, if the search object has a different search class than what is
+	 * specified, an exception is thrown.
 	 */
 	protected Object _searchUnique(Class<?> searchClass, ISearch search) {
 		if (search == null)
 			throw new NullPointerException("Search is null.");
 		if (searchClass == null)
 			throw new NullPointerException("Search class is null.");
-		if (search.getSearchClass() != null && !search.getSearchClass().equals(searchClass))
-			throw new IllegalArgumentException("Search class does not match expected type: " + searchClass.getName());
+		if (search.getSearchClass() != null
+				&& !search.getSearchClass().equals(searchClass))
+			throw new IllegalArgumentException(
+					"Search class does not match expected type: "
+							+ searchClass.getName());
 
-		return getSearchProcessor().searchUnique(getSession(), searchClass, search);
+		return getSearchProcessor().searchUnique(getSession(), searchClass,
+				search);
 	}
 
 	/**
@@ -633,9 +675,12 @@ public class HibernateBaseDAO {
 			throw new NullPointerException("Type is null.");
 		if (id == null)
 			return false;
-		type = metadataUtil.getUnproxiedClass(type); //Get the real entity class
+		type = metadataUtil.getUnproxiedClass(type); // Get the real entity
+														// class
 
-		Query query = getSession().createQuery("select id from " + getMetadataUtil().get(type).getEntityName() + " where id = :id");
+		Query query = getSession().createQuery(
+				"select id from " + getMetadataUtil().get(type).getEntityName()
+						+ " where id = :id");
 		query.setParameter("id", id);
 		return query.list().size() == 1;
 	}
@@ -643,13 +688,15 @@ public class HibernateBaseDAO {
 	protected boolean[] _exists(Class<?> type, Serializable... ids) {
 		if (type == null)
 			throw new NullPointerException("Type is null.");
-		type = metadataUtil.getUnproxiedClass(type); //Get the real entity class
+		type = metadataUtil.getUnproxiedClass(type); // Get the real entity
+														// class
 
 		boolean[] ret = new boolean[ids.length];
 
 		// we can't use "id in (:ids)" because some databases do not support
 		// this for compound ids.
-		StringBuilder sb = new StringBuilder("select id from " + getMetadataUtil().get(type).getEntityName() + " where");
+		StringBuilder sb = new StringBuilder("select id from "
+				+ getMetadataUtil().get(type).getEntityName() + " where");
 		boolean first = true;
 		for (int i = 0; i < ids.length; i++) {
 			if (first) {
@@ -677,12 +724,13 @@ public class HibernateBaseDAO {
 
 		return ret;
 	}
-	
+
 	protected Filter _getFilterFromExample(Object example) {
 		return searchProcessor.getFilterFromExample(example);
 	}
-	
-	protected Filter _getFilterFromExample(Object example, ExampleOptions options) {
+
+	protected Filter _getFilterFromExample(Object example,
+			ExampleOptions options) {
 		return searchProcessor.getFilterFromExample(example, options);
 	}
 }

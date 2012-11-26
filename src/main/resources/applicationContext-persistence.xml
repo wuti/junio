@@ -65,7 +65,7 @@
 
 	<aop:config>
 		<aop:pointcut id="serviceMethods"
-			expression="execution(* com.cqtd..service.*.*(..))" />
+			expression="execution(* com.foo..service.*.*(..))" />
 		<aop:advisor advice-ref="txAdvice" pointcut-ref="serviceMethods" />
 	</aop:config>
 </beans>

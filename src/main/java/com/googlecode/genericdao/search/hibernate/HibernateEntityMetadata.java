@@ -16,11 +16,9 @@ package com.googlecode.genericdao.search.hibernate;
 
 import java.io.Serializable;
 
-import org.hibernate.EntityMode;
 import org.hibernate.SessionFactory;
 import org.hibernate.engine.spi.SessionFactoryImplementor;
 import org.hibernate.metadata.ClassMetadata;
-import org.hibernate.proxy.HibernateProxy;
 import org.hibernate.type.CollectionType;
 import org.hibernate.type.EntityType;
 import org.hibernate.type.Type;
@@ -59,13 +57,10 @@ public class HibernateEntityMetadata implements Metadata {
 	}
 
 	public Serializable getIdValue(Object object) {
-		if (object instanceof HibernateProxy) {
-			return ((HibernateProxy) object).getHibernateLazyInitializer()
-					.getIdentifier();
-		} else {
-			// Modify by Steve
-			return metadata.getIdentifier(object, null);
-		}
+		return metadata.getIdentifier(object, null);
+		// throw new
+		// InvocationFailureException("you should never call the method");
+
 	}
 
 	public Class<?> getJavaClass() {
