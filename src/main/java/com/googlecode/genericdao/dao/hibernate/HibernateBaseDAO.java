@@ -313,20 +313,27 @@ public class HibernateBaseDAO {
 	 *         removed, <code>false</code> if the item is not found.
 	 */
 	protected boolean _deleteEntity(Object entity) {
-
-		if (entity != null) {
-			Serializable id = getMetadataUtil().getId(entity);
-			if (id != null) {
-				entity = getSession().get(
-						metadataUtil.getUnproxiedClass(entity), id);
-				if (entity != null) {
-					getSession().delete(entity);
-					return true;
-				}
-			}
+		// TODOO
+		try {
+			getSession().delete(entity);
+			return true;
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			return false;
 		}
+
+		// if (entity != null) {
+		// Serializable id = getMetadataUtil().getId(entity);
+		// if (id != null) {
+		// entity = getSession().get(
+		// metadataUtil.getUnproxiedClass(entity), id);
+		// if (entity != null) {
 		// getSession().delete(entity);
-		return true;
+		// return true;
+		// }
+		// }
+		// }
+		// return true;
 	}
 
 	/**

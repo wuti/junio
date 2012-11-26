@@ -88,16 +88,16 @@ public class HelloAction extends FooGenericAction implements ModelDriven<Foo>,
 			myMap.put("iTotalDisplayRecords", searchResult.getTotalCount());
 		}
 		FooUtils.printJsonObjectSerializeNulls(response, myMap);
-		System.out.println("Add test");
-		Foo myFoo = new Foo();
-		Search mySearch = new Search();
-		mySearch.setSearchClass(Foo.class);
-		mySearch.addFilterEqual("id", "2c9e9d86343ae29801343ae2b30c0001");
-		myFoo = fooService.searchUnique(mySearch);
-		myFoo.setText("123456");
-		fooService.save(myFoo);
+		// System.out.println("Add test");
+		// Foo myFoo = new Foo();
+		// Search mySearch = new Search();
+		// mySearch.setSearchClass(Foo.class);
+		// mySearch.addFilterEqual("id", "2c9e9d86343ae29801343ae2b30c0001");
+		// myFoo = fooService.searchUnique(mySearch);
+		// myFoo.setText("123456");
+		// fooService.save(myFoo);
 		System.out.println("Remove test");
-		myFoo = new Foo();
+		Foo myFoo = new Foo();
 		myFoo.setId("2c9e9d86343ae29801343ae2b30c0001");
 		fooService.remove(myFoo);
 	}
