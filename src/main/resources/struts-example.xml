@@ -6,7 +6,7 @@
 
 <struts>
 	<package name="example" extends="struts-default" namespace="/example">
-		<action name="getAjaxData" class="com.cqtd.example.action.HelloAction"
+		<action name="getAjaxData" class="com.foo.example.action.HelloAction"
 			method="getAjaxData">
 		</action>
 	</package>

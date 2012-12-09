@@ -15,17 +15,14 @@
 	<!-- Spring will find all of our service and DAO components because they 
 		have @Service and @Repository annotations. We do not need to configure them 
 		in XML -->
-	<context:component-scan base-package="com.cqtd">
+	<context:component-scan base-package="com.foo">
 		<context:include-filter type="regex"
 			expression=".*service" />
 		<context:include-filter type="regex"
 			expression=".*dao" />
 	</context:component-scan>
 
-	<context:property-placeholder location="classpath:target-oracle.properties" />
-	<!-- 
-		<context:property-placeholder location="classpath:target-mysql.properties" />
-	 -->
+	<context:property-placeholder location="classpath:target-mysql.properties" />
 
 	<task:annotation-driven executor="myExecutor" scheduler="myScheduler" />
 	<task:executor id="myExecutor" pool-size="50" />
