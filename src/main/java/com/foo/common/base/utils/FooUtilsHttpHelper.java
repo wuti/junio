@@ -1,10 +1,7 @@
 package com.foo.common.base.utils;
 
-import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
-
-import javax.print.attribute.standard.Copies;
 
 import org.apache.http.Header;
 import org.apache.http.HttpEntity;
@@ -23,6 +20,9 @@ import org.apache.http.util.EntityUtils;
 import com.google.common.base.Preconditions;
 import com.google.common.base.Strings;
 
+/**
+ *  This class simulate the process of zznode IMTS login
+ */
 public class FooUtilsHttpHelper {
 	public static void main(String[] args) throws Exception {
 		DefaultHttpClient httpclient = new DefaultHttpClient();
@@ -53,8 +53,8 @@ public class FooUtilsHttpHelper {
 		for (Cookie tmpCookie : httpclient.getCookieStore().getCookies()) {
 
 			if (tmpCookie != null
-					&& Strings.nullToEmpty(tmpCookie.getName()).equals(
-							"JSESSIONID")) {
+					&& Strings.nullToEmpty(tmpCookie.getName())
+							.equalsIgnoreCase("JSESSIONID")) {
 				cookie = tmpCookie;
 				break;
 			}
@@ -67,7 +67,7 @@ public class FooUtilsHttpHelper {
 		Preconditions.checkNotNull(cookie);
 
 		HttpPost httpPost = new HttpPost(
-				"http://192.168.2.112:9980/itms/pages/security/loginAction.action;jsessionid=51775AE9C6A24BC24937F799E7900536");
+				"http://192.168.2.112:9980/itms/pages/security/loginAction.action");
 
 		// httpPost.setHeader("Accept",
 		// "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8");
