@@ -199,6 +199,11 @@
 			<artifactId>spring-webmvc</artifactId>
 			<version>3.1.2.RELEASE</version>
 		</dependency>
+		<dependency>
+			<groupId>org.apache.httpcomponents</groupId>
+			<artifactId>httpclient</artifactId>
+			<version>4.2.2</version>
+		</dependency>
 	</dependencies>
 	<description>A fresh ssh construct.</description>
 	<organization>

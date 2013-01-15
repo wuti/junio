@@ -96,10 +96,10 @@ public class HelloAction extends FooGenericAction implements ModelDriven<Foo>,
 		// myFoo = fooService.searchUnique(mySearch);
 		// myFoo.setText("123456");
 		// fooService.save(myFoo);
-		System.out.println("Remove test");
-		Foo myFoo = new Foo();
-		myFoo.setId("2c9e9d86343ae29801343ae2b30c0001");
-		fooService.remove(myFoo);
+		// System.out.println("Remove test");
+		// Foo myFoo = new Foo();
+		// myFoo.setId("2c9e9d86343ae29801343ae2b30c0001");
+		// fooService.remove(myFoo);
 	}
 
 	/**
