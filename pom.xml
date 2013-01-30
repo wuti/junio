@@ -79,6 +79,11 @@
 			<version>1.8.3</version>
 		</dependency>
 		<dependency>
+			<groupId>com.oracle</groupId>
+			<artifactId>ojdbc14</artifactId>
+			<version>10.2.0.1.0</version>
+		</dependency>
+		<dependency>
 			<groupId>javax.servlet</groupId>
 			<artifactId>jstl</artifactId>
 			<version>1.2</version>
@@ -203,6 +208,11 @@
 			<groupId>org.apache.httpcomponents</groupId>
 			<artifactId>httpclient</artifactId>
 			<version>4.2.2</version>
+		</dependency>
+		<dependency>
+			<groupId>net.sf.jsqlparser</groupId>
+			<artifactId>jsqlparser</artifactId>
+			<version>0.8.0</version>
 		</dependency>
 	</dependencies>
 	<description>A fresh ssh construct.</description>
