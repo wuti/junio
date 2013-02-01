@@ -1,9 +1,16 @@
 package com.foo.common.base.utils;
 
+import java.net.URLEncoder;
+
 import org.apache.http.client.ResponseHandler;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.BasicResponseHandler;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.params.CoreConnectionPNames;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 
 /**
  * This class simulate the process of get helloKitty film sources
@@ -11,11 +18,24 @@ import org.apache.http.impl.client.DefaultHttpClient;
 public class FooUtilsHttpHelper2 {
 	public static void main(String[] args) throws Exception {
 
-		String filmName = "Cust and caution";
+		String filmName = "NGD-110";
 
 		DefaultHttpClient httpclient = new DefaultHttpClient();
-		HttpGet httpGet = new HttpGet("http://www.torrentkitty.com/search/"
-				+ filmName + "/");
+
+		String myURL = "http://www.torrentkitty.com/search/"
+				+ URLEncoder.encode(filmName, "utf-8") + "/";
+
+		HttpGet httpGet = new HttpGet(myURL);
+
+		System.out.println(myURL);
+
+		// Request timeout
+		httpclient.getParams().setParameter(
+				CoreConnectionPNames.CONNECTION_TIMEOUT, 60000);
+
+		// Read timeout
+		httpclient.getParams().setParameter(CoreConnectionPNames.SO_TIMEOUT,
+				60000);
 
 		httpGet.setHeader("Accept",
 				"text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8");
@@ -34,7 +54,24 @@ public class FooUtilsHttpHelper2 {
 
 		ResponseHandler<String> responseHandler = new BasicResponseHandler();
 		String responseBody = httpclient.execute(httpGet, responseHandler);
-		System.out.println(responseBody);
+
+		if (responseBody != null) {
+
+			responseBody = new String(responseBody.getBytes("ISO-8859-1"),
+					"UTF-8");
+
+			Document doc = Jsoup.parse(responseBody, "UTF-8");
+
+			Elements pngs = doc.select("table#archiveResult tr:gt(0)");
+
+			for (Element element : pngs) {
+				System.out.println(element.select("td.name").text());
+
+				System.out.println(FooUtils.parseMagnetStr(element.select(
+						"a:eq(1)").attr("href")));
+				System.out.println("------------------");
+			}
+		}
 		httpGet.releaseConnection();
 
 	}

@@ -29,6 +29,20 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 public class FooUtils {
+
+	public static String parseMagnetStr(String source) {
+		int magnetProtocolLength = 60;
+
+		int x = source.indexOf("magnet:?xt=", 0);
+
+		if (x == -1) {
+			System.out.print("No magnet exist，reutrn");
+			return "";
+		}
+		return source.substring(x, x + magnetProtocolLength);
+
+	}
+
 	/**
 	 * 转化为年到秒的时间格式
 	 * 
