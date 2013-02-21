@@ -18,7 +18,7 @@ import org.jsoup.select.Elements;
 public class FooUtilsHttpHelper2 {
 	public static void main(String[] args) throws Exception {
 
-		String filmName = "NGD-110";
+		String filmName = "さとう遥希";
 
 		DefaultHttpClient httpclient = new DefaultHttpClient();
 

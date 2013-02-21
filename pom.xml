@@ -31,10 +31,8 @@
 		<dependency>
 			<groupId>commons-fileupload</groupId>
 			<artifactId>commons-fileupload</artifactId>
-			<version>1.1.1</version>
+			<version>1.2.2</version>
 		</dependency>
-
-
 		<dependency>
 			<groupId>commons-logging</groupId>
 			<artifactId>commons-logging</artifactId>
@@ -181,19 +179,14 @@
 			<version>1.7.0</version>
 		</dependency>
 		<dependency>
-			<groupId>com.google.guava</groupId>
-			<artifactId>guava</artifactId>
-			<version>13.0.1</version>
-		</dependency>
-		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-api</artifactId>
-			<version>1.7.1</version>
+			<version>1.7.2</version>
 		</dependency>
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-simple</artifactId>
-			<version>1.7.1</version>
+			<version>1.7.2</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework</groupId>
@@ -220,6 +213,11 @@
 			<groupId>net.sf.jsqlparser</groupId>
 			<artifactId>jsqlparser</artifactId>
 			<version>0.8.0</version>
+		</dependency>
+		<dependency>
+			<groupId>com.google.guava</groupId>
+			<artifactId>guava</artifactId>
+			<version>14.0-rc1</version>
 		</dependency>
 	</dependencies>
 	<description>A fresh ssh construct.</description>
