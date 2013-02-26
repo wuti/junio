@@ -18,6 +18,6 @@ public class FooServiceImpl extends FooGenericServiceImpl<Foo> implements
 
 	@Scheduled(fixedDelay = 60000)
 	public void doJob() {
-		System.out.println("fuck");
+//		System.out.println("fuck");
 	}
 }

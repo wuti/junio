@@ -15,10 +15,10 @@ import org.jsoup.select.Elements;
 /**
  * This class simulate the process of get helloKitty film sources
  */
-public class FooUtilsHttpHelper2 {
+public class FooUtilsHttpHelperForHelloKitty {
 	public static void main(String[] args) throws Exception {
 
-		String filmName = "さとう遥希";
+		String filmName = "麻美ゆま合輯";
 
 		DefaultHttpClient httpclient = new DefaultHttpClient();
 

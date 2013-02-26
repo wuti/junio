@@ -15,25 +15,15 @@ import com.google.common.collect.Maps;
 import com.googlecode.genericdao.search.Search;
 import com.googlecode.genericdao.search.SearchResult;
 import com.opensymphony.xwork2.Action;
-import com.opensymphony.xwork2.ModelDriven;
-import com.opensymphony.xwork2.Preparable;
 
-public class HelloAction extends FooGenericAction implements ModelDriven<Foo>,
-		Preparable { // 模型驱动
+public class HelloAction extends FooGenericAction { // 模型驱动
 	private static final long serialVersionUID = 1L;
 	@Autowired
 	private FooService fooService;
-	private Map<String, Object> jsonList;
-
-	private Foo foo = new Foo(); // 使用模型驱动 必须实例化对象 即new Foo();
-
-	public String getWestPanel() {
-		return Action.SUCCESS;
-	}
 
 	@Override
 	public String execute() throws Exception {
-
+		System.out.println("test");
 		// Foo attachTree1 = new Foo();
 		// Foo attachTree2 = new Foo();
 		// fooService.save(attachTree1, attachTree2);
@@ -138,58 +128,5 @@ public class HelloAction extends FooGenericAction implements ModelDriven<Foo>,
 		myMap.put("totalPage", 13); // 需要计算 总页数
 
 		FooUtils.printJsonObject(response, myMap);
-	}
-
-	public void easyuiAdd() throws Exception {
-		fooService.save(foo);
-		FooUtils.printJsonSuccessMsg(response);
-	}
-
-	public void easyuiModify() throws Exception {
-		fooService.save(foo);
-		FooUtils.printJsonSuccessMsg(response);
-	}
-
-	public void easyuiRemove() throws Exception {
-		String id = request.getParameter("id");
-		if (!Strings.isNullOrEmpty(id)) {
-			fooService.removeById(id);
-			FooUtils.printJsonSuccessMsg(response);
-		}
-	}
-
-	public String goToList() {
-		return Action.SUCCESS;
-	}
-
-	public String goToList2() {
-		return Action.SUCCESS;
-	}
-
-	public String goToList3() {
-		return Action.SUCCESS;
-	}
-
-	public Map<String, Object> getJsonList() {
-		return jsonList;
-	}
-
-	public void setJsonList(Map<String, Object> jsonList) {
-		this.jsonList = jsonList;
-	}
-
-	public Foo getFoo() {
-		return foo;
-	}
-
-	public void setFoo(Foo foo) {
-		this.foo = foo;
-	}
-
-	public void prepare() throws Exception {
-	}
-
-	public Foo getModel() {
-		return foo;
 	}
 }

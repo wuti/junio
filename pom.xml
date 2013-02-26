@@ -219,6 +219,11 @@
 			<artifactId>guava</artifactId>
 			<version>14.0-rc1</version>
 		</dependency>
+		<dependency>
+			<groupId>commons-net</groupId>
+			<artifactId>commons-net</artifactId>
+			<version>3.2</version>
+		</dependency>
 	</dependencies>
 	<description>A fresh ssh construct.</description>
 	<organization>
@@ -249,7 +254,7 @@
 				<artifactId>maven-resources-plugin</artifactId>
 				<version>2.5</version>
 				<configuration>
-					<outputDirectory>${basedir}/target/classes</outputDirectory>
+					<outputDirectory>${basedir}/target/watermelon/WEB-INF/classes</outputDirectory>
 					<!-- <outputDirectory>${basedir}/src/main/webapp/WEB-INF/classes</outputDirectory> -->
 					<source>1.6</source>
 					<target>1.6</target>
