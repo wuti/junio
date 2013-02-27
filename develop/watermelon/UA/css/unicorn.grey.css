@@ -3,7 +3,7 @@
  * Diablo9983 -> diablo9983@gmail.com
 **/
 body {
-	background-color: #444444;
+	background-color: #FFFFFF;
 }
 
 #header {
@@ -34,7 +34,7 @@ body {
 	border-bottom: 1px solid #393939;
 }
 #sidebar > ul > li.active {
-    background-color: #3a3a3a;
+    background-color: #FFFFFF;
 	background-image: -webkit-gradient(linear, 0 0%, 0 100%, from(#333333), to(#3F3F3F));
 	background-image: -webkit-linear-gradient(top, #333333 0%, #3F3F3F 100%);
 	background-image: -moz-linear-gradient(top, #333333 0%, #3F3F3F 100%);
@@ -69,7 +69,7 @@ body {
 }
 
 .dropdown-menu li a:hover, .dropdown-menu .active a, .dropdown-menu .active a:hover {
-	background-color: #444444;
+	background-color: #FFFFFF;
 }
 
 @media (max-width: 480px) {
@@ -78,7 +78,7 @@ body {
 		border-bottom: 1px solid #6e6e6e;
 	}
 	#sidebar > ul {
-		background-color: #444444;
+		background-color: #FFFFFF;
 	}
 }
 @media (min-width: 481px) and (max-width: 767px) {

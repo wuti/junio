@@ -1,0 +1,163 @@
+<script type="text/javascript">
+	sy.ns('Example1');
+	Example1.url = '';
+	Example1.newItem =function(){
+		alert(Example1.url);
+	}
+	
+	function saveItem(){
+		$('#myform').form('submit',{
+			url:Example1.url,
+			onSubmit:function(){return $(this).form('validate');},
+			success:function(){
+				$('#dlg').dialog('close');
+				$('#admin_yhgl_datagrid').datagrid('reload');
+			}
+		});
+	}
+	
+	
+	$(function() {
+		$('#admin_yhgl_datagrid').datagrid({
+			url : 'easyUiList.action',
+			pagination : true,
+			queryParams : {},
+			sortName : 'name',
+			sortOrder : 'asc',
+			idField : 'id',
+			striped : true,
+			fit : true,
+			title : '',
+			rownumbers : false,
+			frozenColumns : [ [ {
+				field : 'id',
+				checkbox : true
+			} ] ],
+			columns : [ [ {
+				field : 'text',
+				title : 'Text',
+				sortable : true,
+				width : 200
+			}, {
+				field : 'yearFlag',
+				title : 'yearFlag',
+				sortable : true,
+				width : 200
+			}, {
+				field : 'monthFlag',
+				title : 'monthFlag',
+				sortable : true,
+				width : 200
+			} ] ],
+			toolbar : [  {
+				text : '添加',
+				iconCls : 'icon-add',
+				handler : function() {
+					Example1.newItem();
+				}
+			}, '-',{
+				text : '修改',
+				iconCls : 'icon-edit',
+				handler : function() {
+				}
+			},'-',{
+				text : '删除',
+				iconCls : 'icon-remove',
+				handler : function() {
+					var ids = [];
+					var rows = $('#admin_yhgl_datagrid').datagrid('getSelections');
+					if (rows.length > 0) {
+						$.messager.confirm('请确认', '您要删除当前所选项目？', function(r) {
+							if (r) {
+								for ( var i = 0; i < rows.length; i++) {
+									ids.push("'" + rows[i].id + "'");
+								}
+								$.ajax({
+									url : 'delete.action',
+									data : {
+										'ids' : ids.join(',')
+									},
+									cache : false,
+									dataType : "json",
+									type : "POST",
+									success : function(response) {
+										$('#admin_yhgl_datagrid').datagrid('unselectAll');
+										$('#admin_yhgl_datagrid').datagrid('reload');
+										$.messager.show({
+											title : '提示',
+											msg : response.msg
+										});
+									}
+								});
+							}
+						});
+
+					} else {
+						$.messager.show({
+							title : '提示',
+							msg : '请选择要删除的记录'
+						});
+					}
+				}
+			}, '-'],
+			onBeforeLoad : function() {
+				$('#admin_yhgl_datagrid').datagrid('acceptChanges');
+			}
+		});
+	});
+</script>
+<table id="admin_yhgl_datagrid">
+</table>
+
+
+
+<div id="dlg" class="easyui-dialog" style="width:550px;height:320px;"
+			closed="true" modal="true" buttons="#dlg-buttons">
+		<form id="myform" method="post">
+			<!-- <jsp:include page="_form.jsp"></jsp:include> -->
+		<div style="padding:20px">
+			<table cellpadding="0" cellspacing="0" class="form-table">
+				<tr>
+					<td style="width:60px">商品编码</td>
+					<td style="width:200px"><input name="code" style="width:150px"></input></td>
+					<td style="width:60px">商品分类</td>
+					<td>
+						<input name="spec" style="width:150px"></input>
+					</td>
+				</tr>
+				<tr>
+					<td>商品名称</td>
+					<td><input name="name" class="easyui-validatebox" required="true" style="width:150px"></input></td>
+					<td>商品规格</td>
+					<td><input name="spec" style="width:150px"></input></td>
+				</tr>
+				<tr>
+					<td>颜色</td>
+					<td><input name="color" style="width:150px"></input></td>
+					<td>品牌</td>
+					<td><input name="brand" style="width:150px"></input></td>
+				</tr>
+				<tr>
+					<td>产地</td>
+					<td><input name="place" style="width:150px"></input></td>
+					<td>厂家</td>
+					<td><input name="vender" style="width:150px"></input></td>
+				</tr>
+				<tr>
+					<td>助记码</td>
+					<td><input name="help" style="width:150px"></input></td>
+					<td>条形码</td>
+					<td><input name="barcode" style="width:150px"></input></td>
+				</tr>
+				<tr>
+					<td>备注</td>
+					<td colspan="3"><input name="remark" style="width:410px"></input></td>
+				</tr>
+			</table>
+		</div>
+		</form>
+		<div id="dlg-buttons" style="text-align:center">
+			<a href="#" class="easyui-linkbutton" iconCls="icon-save" onclick="Example1.saveItem()">保存</a>
+			<a href="#" class="easyui-linkbutton" iconCls="icon-cancel" onclick="javascript:$('#dlg').dialog('close')">取消</a>
+		</div>
+	</div>
