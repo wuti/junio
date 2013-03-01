@@ -5,6 +5,8 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Properties;
 
+import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.io.IOUtils;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -20,26 +22,41 @@ import com.google.common.io.Files;
 import com.google.common.io.LineProcessor;
 
 public class QuickCopyTest {
-	@Test
 	/**
 	 * copy目录为如下的java类的class到桌面
 	 */
+	@Test
 	public void quickCopyTest() throws IOException {
 
-		// 由前台js转换而来
-		String relativePath = "D:\\zzNode/itmsPlus/UI_DEV/webapp/WEB-INF/classes";
+		ClassPathResource myPath = new ClassPathResource("test.properties");
+		Properties p = new Properties();
+		p.load(myPath.getInputStream());
 
-		// 由前台js转换而来
-		String classPath = "C:\\Users/Steve/Desktop/1.txt";
+		// 由配置而来
+		String classBaseDir = FilenameUtils.separatorsToSystem(p
+				.getProperty("classBaseDir"));
 
-		// ClassPathResource myPath = new ClassPathResource("test.properties");
-		// Properties p = new Properties();
-		// p.load(myPath.getInputStream());
-		// System.out.println(p.getProperty("path"));
+		String javaBaseDir = FilenameUtils.separatorsToSystem(p
+				.getProperty("javaBaseDir"));
 
-		File myFile = new File(classPath);
-		// 通过java的类分析得到真正的类路径
-		// TODOO
+		String javaFilePath = "D:\\zzNode\\itmsPlus\\UI_DEV\\src\\java\\com\\jscud\\www\\wwvalidator\\ABCLetterValidator.java";
+
+		String realClassPath = classBaseDir
+				+ javaFilePath.replace(javaBaseDir, "").replaceAll(".java",
+						".class");
+
+		org.junit.Assert
+				.assertEquals(
+						"failure - strings not same",
+						realClassPath,
+						"D:\\zzNode\\itmsPlus\\UI_DEV\\webapp\\WEB-INF\\classes\\com\\jscud\\www\\wwvalidator\\ABCLetterValidator.class");
+
+		File myOriginalFile = new File(realClassPath);
+
+		String targetFilePath = "C:\\Users\\Steve\\Desktop\\";
+
+		Files.copy(myOriginalFile,
+				new File(targetFilePath + myOriginalFile.getName()));
 
 	}
 
@@ -66,9 +83,11 @@ public class QuickCopyTest {
 
 		List myList = myQuery.list();
 
-		System.out.println(myList.get(0).toString());
+		String mypath = myList.get(0).toString();
 
 		mySession.getTransaction().commit();
+
+		System.out.println(FilenameUtils.getFullPath(mypath));
 	}
 
 }

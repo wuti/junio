@@ -1,14 +1,46 @@
+<%@ page contentType="text/html;charset=UTF-8" language="java"%>
+<!-- Jstl and config start -->
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<c:set var="app" scope="page" value="${pageContext.request.contextPath}" />
 <!DOCTYPE html>
 <html lang="en">
 	<head>
-		<title>Unicorn Admin</title>
+		<title>Steve Admin</title>
 		<meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<link rel="stylesheet" href="css/bootstrap.min.css" />
 		<link rel="stylesheet" href="css/bootstrap-responsive.min.css" />
-		<link rel="stylesheet" href="css/fullcalendar.css" />	
 		<link rel="stylesheet" href="css/unicorn.main.css" />
 		<link rel="stylesheet" href="css/unicorn.grey.css" class="skin-color" />
+		  <script src="js/excanvas.min.js"></script>
+            <script src="js/jquery.min.js"></script>
+            <script src="js/jquery.ui.custom.js"></script>
+          <script src="js/bootstrap.min.js"></script>
+		 <script type="text/javascript">
+		 var myJ=jQuery.noConflict();
+		 myJ(function() {
+			 myJ('button#myButton').on('click',function(){
+				 myJ.ajax({
+					    type: "POST",
+					    url: "${app}/example/quickCopyClass.action",
+					    data: myJ('form#myForm').serialize(),
+					    statusCode: {
+					        500: function() {
+					          alert("unexpected system error");
+					        }
+					    },
+					    timeout: 5000,
+					    //超时会在error处理
+					    success: function(jsonMsg) {
+					    	alert("Request success"+jsonMsg);
+					    },
+					    error: function(jqXHR, textStatus, errorThrown) {
+					    	alert( "Request failed: " + textStatus );
+					    }
+					});
+				});
+		 });
+		</script>
 	</head>
 	<body>
 		
@@ -105,15 +137,15 @@
 								<h5>QuickCopyClass</h5>
 							</div>
 							<div class="widget-content nopadding">
-								<form action="#" method="get" class="form-horizontal">
+								<form action="#" method="get" id="myForm" class="form-horizontal">
 									<div class="control-group">
 										<label class="control-label">Eclipse absolute path</label>
 										<div class="controls">
-											<input type="text" placeholder="D:\programTool\myGit\junio\src\main\java\com\foo\common\base\utils\FooUtils.java" />
+											<input type="text" id="javaFilePath" name="javaFilePath" placeholder="D:\programTool\myGit\junio\src\main\java\com\foo\common\base\utils\FooUtils.java" />
 										</div>
 									</div>
 									<div class="form-actions">
-										<button type="submit" class="btn btn-primary">Go!</button>
+										<button type="submit" id="myButton" class="btn btn-primary">Go!</button>
 									</div>
 								</form>
 							</div>
@@ -122,16 +154,5 @@
 				</div>
 			</div>
 </div>
-     
-            <script src="js/excanvas.min.js"></script>
-            <script src="js/jquery.min.js"></script>
-            <script src="js/jquery.ui.custom.js"></script>
-            <script src="js/bootstrap.min.js"></script>
-            <script src="js/jquery.flot.min.js"></script>
-            <script src="js/jquery.flot.resize.min.js"></script>
-            <script src="js/jquery.peity.min.js"></script>
-            <script src="js/fullcalendar.min.js"></script>
-            <script src="js/unicorn.js"></script>
-            <script src="js/unicorn.dashboard.js"></script>
 	</body>
 </html>
