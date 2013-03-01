@@ -224,6 +224,11 @@
 			<artifactId>commons-net</artifactId>
 			<version>3.2</version>
 		</dependency>
+		<dependency>
+			<groupId>commons-io</groupId>
+			<artifactId>commons-io</artifactId>
+			<version>2.4</version>
+		</dependency>
 	</dependencies>
 	<description>A fresh ssh construct.</description>
 	<organization>
@@ -268,7 +273,7 @@
 				</configuration>
 				<executions>
 					<execution>
-						<id>copy-resources</id>
+						<id>copyTestResources</id>
 						<!-- here the phase you need -->
 						<phase>validate</phase>
 						<goals>
@@ -280,6 +285,24 @@
 							<resources>
 								<resource>
 									<directory>src/test/resources</directory>
+									<filtering>true</filtering>
+								</resource>
+							</resources>
+						</configuration>
+					</execution>
+					<execution>
+						<id>copyJavaConfigResources</id>
+						<!-- here the phase you need -->
+						<phase>validate</phase>
+						<goals>
+							<goal>copy-resources</goal>
+						</goals>
+						<configuration>
+							<outputDirectory>target/watermelon/WEB-INF/classes</outputDirectory>
+							<encoding>UTF-8</encoding>
+							<resources>
+								<resource>
+									<directory>src/main/resources</directory>
 									<filtering>true</filtering>
 								</resource>
 							</resources>
