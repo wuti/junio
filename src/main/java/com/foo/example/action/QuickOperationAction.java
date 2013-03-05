@@ -45,10 +45,6 @@ public class QuickOperationAction extends FooGenericAction {
 		Files.copy(myOriginalFile,
 				new File(targetFilePath + myOriginalFile.getName()));
 
-		// FooUtils.printJsonSuccessMsg(response);
-
-		System.out.println("das");
-		throw new RuntimeException("fuck");
-
+		FooUtils.printJsonSuccessMsg(response);
 	}
 }

@@ -14,7 +14,7 @@ public class Foo {
 	@Id
 	// @GeneratedValue(strategy = GenerationType.AUTO)
 	@javax.persistence.GeneratedValue(generator = "system-uuid")
-	@org.hibernate.annotations.GenericGenerator(name = "system-uuid", strategy = "uuid.hex")
+	@org.hibernate.annotations.GenericGenerator(name = "system-uuid", strategy = "uuid2")
 	// @org.hibernate.annotations.GenericGenerator(name = "system-uuid",
 	// strategy = "assigned")
 	private String id;

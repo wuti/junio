@@ -139,6 +139,16 @@
 							<div class="widget-content nopadding">
 								<form action="#" method="get" id="myForm" class="form-horizontal">
 									<div class="control-group">
+										<label class="control-label">Select input</label>
+										<div class="controls">
+											<select>
+												<option>ITMS CORE</option>
+												<option>ITMS UI</option>
+												<option>WATERMELON</option>
+											</select>
+										</div>
+									</div>
+									<div class="control-group">
 										<label class="control-label">Eclipse absolute path</label>
 										<div class="controls">
 											<input type="text" id="javaFilePath" name="javaFilePath" placeholder="D:\programTool\myGit\junio\src\main\java\com\foo\common\base\utils\FooUtils.java" />

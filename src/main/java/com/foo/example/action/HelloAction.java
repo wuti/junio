@@ -54,6 +54,7 @@ public class HelloAction extends FooGenericAction { // 模型驱动
 		// fooService.remove(foo);
 		//
 		// System.out.println("enter2");
+		System.out.println("hehe");
 
 		Map<String, Object> myMap = Maps.newHashMap();
 		Search search = new Search();
