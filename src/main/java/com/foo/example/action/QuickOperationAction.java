@@ -20,8 +20,10 @@ public class QuickOperationAction extends FooGenericAction {
 
 	public void quickCopyClass() throws IOException {
 
-		ClassPathResource myPath = new ClassPathResource(
-				"target-itms.properties");
+		String myConfigPattern = request.getParameter("myPattern");
+
+		ClassPathResource myPath = new ClassPathResource("target-"
+				+ myConfigPattern + ".properties");
 		Properties p = new Properties();
 		p.load(myPath.getInputStream());
 
@@ -32,18 +34,23 @@ public class QuickOperationAction extends FooGenericAction {
 		String javaBaseDir = FilenameUtils.separatorsToSystem(p
 				.getProperty("javaBaseDir"));
 
-		String javaFilePath = request.getParameter("javaFilePath");
+		String sourceFilePath = request.getParameter("sourceFilePath");
+		String targetFilePath = request.getParameter("targetFilePath");
 
 		String realClassPath = classBaseDir
-				+ javaFilePath.replace(javaBaseDir, "").replaceAll(".java",
+				+ sourceFilePath.replace(javaBaseDir, "").replaceAll(".java",
 						".class");
 
+		logger.info(realClassPath);
+		
 		File myOriginalFile = new File(realClassPath);
-
-		String targetFilePath = "C:\\Users\\Steve\\Desktop\\";
 
 		Files.copy(myOriginalFile,
 				new File(targetFilePath + myOriginalFile.getName()));
+
+
+		logger.info("COPY CLASS:" + myOriginalFile + " TO " + targetFilePath
+				+ myOriginalFile.getName());
 
 		FooUtils.printJsonSuccessMsg(response);
 	}
