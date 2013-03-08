@@ -121,6 +121,16 @@ public class FooUtils {
 						.put("success", "true").put("msg", "ok").build()));
 	}
 
+	public static void printJsonMessage(HttpServletResponse response,
+			String message) throws IOException {
+		response.setCharacterEncoding(Charsets.UTF_8.toString());
+		response.setContentType("text/plain");
+		response.getWriter().write(
+				new Gson().toJson(new ImmutableMap.Builder<String, String>()
+						.put("success", "true").put("msg", "ok")
+						.put("message", message).build()));
+	}
+
 	/**
 	 * 读入HttpServletResponse,将Json格式写出对象到HttpServletResponse
 	 * 

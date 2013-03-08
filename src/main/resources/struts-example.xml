@@ -12,5 +12,8 @@
 		<action name="quickCopyClass" class="com.foo.example.action.QuickOperationAction"
 			method="quickCopyClass">
 		</action>
+		<action name="quickDeployClass" class="com.foo.example.action.QuickOperationAction"
+			method="quickDeployClass">
+		</action>
 	</package>
 </struts>
