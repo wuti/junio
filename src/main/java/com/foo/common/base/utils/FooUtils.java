@@ -258,18 +258,8 @@ public class FooUtils {
 	}
 
 	public static void main(String[] args) throws Exception {
-		InputStream inp = new FileInputStream("d:\\myResult.xlsx");
-		Workbook wb = WorkbookFactory.create(inp);
-		Sheet sheet = wb.getSheetAt(0);
-		Row row = sheet.createRow(0);
-		Cell cell = row.createCell(0);
-		cell.setCellType(Cell.CELL_TYPE_STRING);
-		cell.setCellValue(FooUtils.formatDouble(8.8944666664));
-
-		// Write the output to a file
-		FileOutputStream fileOut = new FileOutputStream("d:\\myResult.xlsx");
-		wb.write(fileOut);
-		fileOut.close();
+		
+		System.out.println("242\n");
 	}
 
 }

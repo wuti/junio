@@ -1,11 +1,14 @@
 package com.foo.example.model;
 
 public class QuickCopyModel {
+	// 项目名称：itmsCore或者itmsUI
 	private String projectName;
+	// Class的基本路径：D:\\zzNode\\itmsPlus\\bin
 	private String classBaseDirOfWindows;
+	// 类的层次结构：\\org\\com\\...
 	private String classPatternOfWindows;
+	// Java的基本路径:D:\\zzNode\\itmsPlus\\ITMS_DEV\\src
 	private String javaBaseDirOfWindows;
-
 	// java class的实际路径
 	private String classPathOfWindows;
 	// java 的实际路径

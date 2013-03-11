@@ -1,6 +1,7 @@
 package com.foo.example.action;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Map;
@@ -8,6 +9,10 @@ import java.util.Properties;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.net.ftp.FTP;
+import org.apache.commons.net.ftp.FTPClient;
+import org.apache.commons.net.ftp.FTPFile;
+import org.apache.commons.net.ftp.FTPReply;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 
@@ -56,7 +61,9 @@ public class QuickOperationAction extends FooGenericAction {
 	}
 
 	/**
-	 * 快速部署class到jar中
+	 * 快速部署class到jar中。目前的工作目录是d:\\zznode\\tmp\\
+	 * 
+	 * 下载jar包等需要到该目录
 	 * 
 	 * @throws IOException
 	 */
@@ -141,6 +148,11 @@ public class QuickOperationAction extends FooGenericAction {
 
 	}
 
+	/**
+	 * 快速拷贝工程路径下的class文件到指定路径 目前只支持itmsCore和itmsUI
+	 * 
+	 * @throws IOException
+	 */
 	public void quickCopyClass() throws IOException {
 
 		String myConfigPattern = request.getParameter("myPattern");
@@ -157,6 +169,7 @@ public class QuickOperationAction extends FooGenericAction {
 		String javaBaseDir = FilenameUtils.separatorsToSystem(p
 				.getProperty("javaBaseDir"));
 
+		// 来自UI传递的参数
 		String sourceFilePath = request.getParameter("sourceFilePath");
 		String targetFilePath = request.getParameter("targetFilePath");
 
@@ -181,5 +194,69 @@ public class QuickOperationAction extends FooGenericAction {
 				+ myOriginalFile.getName());
 
 		FooUtils.printJsonSuccessMsg(response);
+	}
+
+	public static void main(String[] args) {
+		FTPClient ftp = new FTPClient();
+		String server = "133.37.111.34";
+		// String server = "192.168.2.112";
+		String savePath = "/home/itms/ITMS_HOME/lib/";
+		// String savePath = "home/ftpitms/";
+		boolean error = false;
+		try {
+			int reply;
+			ftp.connect(server);
+			ftp.login("itms", "itmscs");
+			// ftp.login("ftpitms", "ftpitms");
+			System.out.println("Connected to " + server + ".");
+
+			// After connection attempt, you should check the reply code to
+			// verify
+			// success.
+			reply = ftp.getReplyCode();
+
+			if (!FTPReply.isPositiveCompletion(reply)) {
+				ftp.disconnect();
+				System.err.println("FTP server refused connection.");
+				System.exit(1);
+			}
+			ftp.enterLocalPassiveMode();
+
+			ftp.setFileType(FTP.BINARY_FILE_TYPE);
+
+			String myBackupDirectory = "/home/itms/ITMS_HOME/backup/";
+			String myWorkingDirectory = "/home/itms/ITMS_HOME/";
+
+			System.out.println(FilenameUtils.separatorsToUnix(FilenameUtils
+					.concat(myWorkingDirectory, myBackupDirectory)));
+
+			// 备份指定文件，Start
+			// cp -urf lib/acsserver.jar backup/
+			// 备份指定文件，End
+
+			// 检测文件是否存在
+			for (FTPFile ftpFile : ftp.listFiles(myBackupDirectory)) {
+				System.out.println(ftpFile.getName());
+			}
+
+			// ftp.storeFile(myBackupDirectory + "test1.txt", new
+			// FileInputStream(
+			// new File("c:\\Users\\Steve\\Desktop\\1.txt")));
+
+			ftp.logout();
+
+		} catch (IOException e) {
+			error = true;
+			e.printStackTrace();
+		} finally {
+			if (ftp.isConnected()) {
+				try {
+					ftp.disconnect();
+				} catch (IOException ioe) {
+					// do nothing
+				}
+			}
+			System.exit(error ? 1 : 0);
+		}
 	}
 }

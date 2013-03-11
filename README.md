@@ -1,4 +1,2 @@
-cqtd
+Utility for commons works.
 ====
-
-To present our ERP-demo only. Since 12,2011

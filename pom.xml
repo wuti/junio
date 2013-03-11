@@ -18,6 +18,12 @@
 			<scope>test</scope>
 		</dependency>
 
+		<dependency>
+			<groupId>com.jcraft</groupId>
+			<artifactId>jsch</artifactId>
+			<version>0.1.49</version>
+		</dependency>
+
 		<!-- Struts 2 -->
 		<!-- Servlet & Jsp -->
 		<dependency>

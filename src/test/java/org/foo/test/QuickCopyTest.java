@@ -3,16 +3,13 @@ package org.foo.test;
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.OutputStream;
+import java.io.InputStream;
 import java.util.List;
 import java.util.Properties;
 
-import net.sf.ehcache.util.ClassLoaderUtil;
-
-import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.net.ftp.FTP;
 import org.apache.commons.net.ftp.FTPClient;
 import org.apache.commons.net.ftp.FTPReply;
@@ -22,14 +19,13 @@ import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.service.ServiceRegistry;
 import org.hibernate.service.ServiceRegistryBuilder;
-import org.junit.Test;
 import org.springframework.core.io.ClassPathResource;
 
 import com.foo.example.model.QuickCopyModel;
-import com.google.common.base.Preconditions;
-import com.google.common.base.Splitter;
 import com.google.common.io.ByteStreams;
-import com.google.common.io.Files;
+import com.jcraft.jsch.Channel;
+import com.jcraft.jsch.ChannelShell;
+import com.jcraft.jsch.JSch;
 
 public class QuickCopyTest {
 
@@ -64,84 +60,35 @@ public class QuickCopyTest {
 		return copyModel;
 	}
 
-	public static void main(String[] args) throws IOException {
+	public static void main(String[] args) throws Exception {
 
-		String myConfigPattern = "itmsCore";
-		String sourceFilePath = "D:\\zzNode\\itmsPlus\\ITMS_DEV\\src\\com\\zznode\\itms\\acs\\manager\\CommandExecutingFaultException.java";
+		JSch jsch = new JSch();
+		String host = null;
+		java.util.Properties config = new java.util.Properties();
+		config.put("StrictHostKeyChecking", "no");
 
-		if (FileUtils.getFile(sourceFilePath) == null) {
-			throw new FileNotFoundException("jarFile named " + sourceFilePath
-					+ " do not exist");
-		}
+		jsch.setKnownHosts("C:\\Users\\Steve\\.ssh\\known_hosts");
+		com.jcraft.jsch.Session session = jsch.getSession("root",
+				"192.168.2.112", 22);
+		session.setPassword("zznode^2012");
+		session.setConfig(config);
+		session.connect(30000); // making a connection with timeout.
 
-		QuickCopyModel copyModel = getExactRealPathOfClassFile(myConfigPattern,
-				sourceFilePath);
-
-		String realClassPath = copyModel.getClassPathOfWindows();
-
-		String myPackagePattern = "";
-
-		File realClassFile = new File(realClassPath);
-
-		if (realClassFile == null || !realClassFile.isFile()) {
-			throw new FileNotFoundException("File named " + realClassFile
-					+ " do not exist");
-		}
-
-		// 通过枚举类型判定所属包,Start
-		if (realClassPath.indexOf("com\\zznode\\itms\\resource\\") != -1) {
-			myPackagePattern = "inventory.jar";
-		} else if (realClassPath.indexOf("com\\zznode\\itms\\oam\\") != -1) {
-			myPackagePattern = "oamserver.jar";
-		} else if (realClassPath.indexOf("com\\zznode\\itms\\pon\\") != -1) {
-			myPackagePattern = "ponmonitorserver.jar";
-		} else if (realClassPath.indexOf("com\\zznode\\itms\\nbi\\") != -1) {
-			myPackagePattern = "nbiserver.jar";
-		} else if (realClassPath.indexOf("com\\zznode\\itms\\acs\\manager\\") != -1) {
-			myPackagePattern = "acsserver.jar";
-		} else if (realClassPath.indexOf("com\\zznode\\itms\\monitor\\") != -1) {
-			myPackagePattern = "systemmonitor.jar";
-		} else if (realClassPath.indexOf("com\\zznode\\itms\\fm\\") != -1) {
-			myPackagePattern = "fmprocessorserver.jar";
-		} else if (realClassPath.indexOf("com\\zznode\\itms\\safe\\") != -1) {
-			myPackagePattern = "safeProcessorServer.jar";
-		} else if (realClassPath.indexOf("com\\zznode\\itms\\snmp\\") != -1) {
-			myPackagePattern = "snmpManager.jar";
-		} else {
-			throw new UnsupportedOperationException("unrecognized class");
-		}
-		// 通过枚举类型判定所属包,End
-
-		String workingDirectory = "d:\\zznode\\tmp\\";
-
-		// 依据类信息形成规范的目录结构,同时清理掉以前的目录,Start
-		String tmpCopyPath = FilenameUtils.normalize(workingDirectory
-				+ copyModel.getClassPatternOfWindows());
-		String myDirForJarCommand = Splitter.on("\\").omitEmptyStrings()
-				.split(copyModel.getClassPatternOfWindows()).iterator().next();
-		FileUtils.deleteDirectory(FileUtils.getFile(workingDirectory
-				+ myDirForJarCommand));
-		File myFile = new File(tmpCopyPath);
-		Files.createParentDirs(myFile);
-		Files.copy(realClassFile, myFile);
-		// 依据类信息形成规范的目录结构,同时清理掉以前的目录,End
-
-		// 更新jar包中的指定文件,Start
-		String jarFilePath = workingDirectory + myPackagePattern;
-		File jarFile = new File(jarFilePath);
-		if (jarFile == null || !jarFile.isFile()) {
-			throw new FileNotFoundException("jarFile named " + jarFile
-					+ " do not exist");
-		}
-		Runtime.getRuntime().exec(
-				"jar uf " + jarFilePath + " -C " + workingDirectory
-						+ myDirForJarCommand);
-		// 更新jar包中的指定文件,End
-
-	}
-
-	@Test
-	public void test() {
+		Channel channel = session.openChannel("shell");
+		channel.setInputStream(IOUtils
+				.toInputStream("pwd && cd /home/itmscs/ITMS_HOME/log && pwd\n"));
+		channel.setOutputStream(System.out);
+		((ChannelShell) channel).setEnv("LANG", "en-us");
+		channel.connect();
+		// Robot robot = new Robot();
+		// robot.keyPress(KeyEvent.VK_P);
+		// robot.keyRelease(KeyEvent.VK_P);
+		// robot.keyPress(KeyEvent.VK_W);
+		// robot.keyRelease(KeyEvent.VK_W);
+		// robot.keyPress(KeyEvent.VK_D);
+		// robot.keyRelease(KeyEvent.VK_D);
+		// robot.keyPress(KeyEvent.VK_ENTER);
+		// robot.keyRelease(KeyEvent.VK_ENTER);
 
 	}
 
