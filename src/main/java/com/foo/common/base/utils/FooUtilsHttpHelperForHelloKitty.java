@@ -18,7 +18,7 @@ import org.jsoup.select.Elements;
 public class FooUtilsHttpHelperForHelloKitty {
 	public static void main(String[] args) throws Exception {
 
-		String filmName = "働くオンナ斩";
+		String filmName = "Marc Dorcel电影合集";
 
 		DefaultHttpClient httpclient = new DefaultHttpClient();
 

@@ -63,11 +63,8 @@ public class QuickCopyTest {
 	public static void main(String[] args) throws Exception {
 
 		JSch jsch = new JSch();
-		String host = null;
 		java.util.Properties config = new java.util.Properties();
 		config.put("StrictHostKeyChecking", "no");
-
-		jsch.setKnownHosts("C:\\Users\\Steve\\.ssh\\known_hosts");
 		com.jcraft.jsch.Session session = jsch.getSession("root",
 				"192.168.2.112", 22);
 		session.setPassword("zznode^2012");
@@ -78,17 +75,7 @@ public class QuickCopyTest {
 		channel.setInputStream(IOUtils
 				.toInputStream("pwd && cd /home/itmscs/ITMS_HOME/log && pwd\n"));
 		channel.setOutputStream(System.out);
-		((ChannelShell) channel).setEnv("LANG", "en-us");
 		channel.connect();
-		// Robot robot = new Robot();
-		// robot.keyPress(KeyEvent.VK_P);
-		// robot.keyRelease(KeyEvent.VK_P);
-		// robot.keyPress(KeyEvent.VK_W);
-		// robot.keyRelease(KeyEvent.VK_W);
-		// robot.keyPress(KeyEvent.VK_D);
-		// robot.keyRelease(KeyEvent.VK_D);
-		// robot.keyPress(KeyEvent.VK_ENTER);
-		// robot.keyRelease(KeyEvent.VK_ENTER);
 
 	}
 
