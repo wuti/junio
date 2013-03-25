@@ -1,4 +1,4 @@
-package com.foo.example.util;
+package com.foo.common.base.utils;
 
 import java.io.IOException;
 import java.util.Properties;
@@ -6,18 +6,22 @@ import java.util.Properties;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.service.ServiceRegistry;
 import org.hibernate.service.ServiceRegistryBuilder;
 import org.springframework.core.io.ClassPathResource;
 
-public class LocalHibernateUtils {
+public class FooUtilsHibernate {
 	private static final SessionFactory sessionFactory = null;
 
-	private static SessionFactory buildSessionFactory() {
+	public static SessionFactory buildSessionFactory() {
 		try {
 			// Create the SessionFactory from hibernate.cfg.xml
-			return new Configuration().configure().buildSessionFactory();
+			ServiceRegistry serviceRegistry = new ServiceRegistryBuilder()
+					.buildServiceRegistry();
+			return new Configuration().configure().buildSessionFactory(
+					serviceRegistry);
 		} catch (Throwable ex) {
 			// Make sure you log the exception, as it might be swallowed
 			System.err.println("Initial SessionFactory creation failed." + ex);
@@ -46,15 +50,39 @@ public class LocalHibernateUtils {
 		SessionFactory myFactory = configuration
 				.buildSessionFactory(serviceRegistry);
 
-		Session mySession = myFactory.openSession();
+		Session session = myFactory.openSession();
 
-		mySession.beginTransaction();
+		Transaction tx = null;
 
-		Query myQuery = mySession
-				.createSQLQuery(" select * from itms_device_static ");
+		// See:http://docs.jboss.org/hibernate/orm/4.1/manual/en-US/html/ch13.html#transactions-demarcation-nonmanaged
+		try {
+			tx = session.beginTransaction();
+			tx.setTimeout(200);
+			doInTransaction(session);
+			tx.commit();
+		} catch (RuntimeException e) {
+			if (tx != null)
+				tx.rollback();
+			throw e; // or display error message
+		} finally {
+			session.close();
+		}
+	}
+
+	public static void doInTransaction(Session session) {
+		
+		//从excel解析数据
+		
+		
+		
+		Query myQuery = session
+				.createSQLQuery(" select * from itms_device_static_1 ");
 
 		System.out.println(myQuery.list().size());
 
-		mySession.getTransaction().commit();
+		myQuery = session
+				.createSQLQuery(" delete from ITMS_RESTART_DEVICE_CONFIG ");
+		myQuery.executeUpdate();
 	}
+
 }

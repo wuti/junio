@@ -30,6 +30,10 @@ import com.google.gson.GsonBuilder;
 
 public class FooUtils {
 
+	public static void log(Object message) {
+		System.out.println(message);
+	}
+
 	public static String parseMagnetStr(String source) {
 		int magnetProtocolLength = 60;
 
@@ -258,7 +262,7 @@ public class FooUtils {
 	}
 
 	public static void main(String[] args) throws Exception {
-		
+
 		System.out.println("242\n");
 	}
 
