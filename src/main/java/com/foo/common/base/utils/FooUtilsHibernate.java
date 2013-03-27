@@ -79,6 +79,7 @@ public class FooUtilsHibernate {
 
 	public static void doInTransaction(Session session) throws IOException {
 
+		// TODO
 		// 从excel解析数据
 
 		// 载入区域码和认证地址的映射
@@ -86,6 +87,11 @@ public class FooUtilsHibernate {
 				"target-itmsAuthURL.properties");
 		Properties p = new Properties();
 		p.load(myPath.getInputStream());
+
+		ClassPathResource myPath2 = new ClassPathResource(
+				"target-itmsAreaCode.properties");
+		Properties p2 = new Properties();
+		p2.load(myPath2.getInputStream());
 
 		String areaCode = "11012";
 		String mac = "B0:75:D5:E1:F3:E3";
@@ -99,7 +105,8 @@ public class FooUtilsHibernate {
 		myObjectNew.setOrder_service_type("0");
 		myObjectNew.setOrder_remark("0");
 		myObjectNew.setOrder_customer_kind("1");
-		myObjectNew.setSystem_domain(1001010000);
+		myObjectNew.setSystem_domain(Integer.valueOf(p2.getProperty(areaCode,
+				"1000000000")));// 默认填写四川电信
 		myObjectNew.setCorporation_domain(0);
 		myObjectNew.setAd_no(mac);
 		myObjectNew.setPppoe_account(pppoe_account);
@@ -149,7 +156,7 @@ public class FooUtilsHibernate {
 		myServiceModel.setService("IPTV");
 		myServiceModel.setService_id(81);
 		myServiceModel.setService_flag("A");
-		myServiceModel.setArgs_value_new(p.getProperty(areaCode));
+		myServiceModel.setArgs_value_new(p.getProperty(areaCode, ""));
 		myModelList.add(myServiceModel);
 
 		myServiceModel = new ItmsOrderServiceModel();
