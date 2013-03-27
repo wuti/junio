@@ -4,11 +4,16 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import org.hibernate.Session;
+import org.hibernate.Transaction;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.foo.common.base.dao.FooGenericDao;
 import com.foo.common.base.pojo.FooGenericSearch;
+import com.foo.common.base.pojo.FooGenericTransactionModel;
 import com.googlecode.genericdao.search.ExampleOptions;
 import com.googlecode.genericdao.search.Filter;
 import com.googlecode.genericdao.search.ISearch;
@@ -16,8 +21,9 @@ import com.googlecode.genericdao.search.Search;
 import com.googlecode.genericdao.search.SearchResult;
 import com.googlecode.genericdao.search.Sort;
 
+@Service
 public class FooGenericServiceImpl<T> implements FooGenericService<T> {
-	private FooGenericDao<T, String> fooGenericDao;
+	protected FooGenericDao<T, String> fooGenericDao;
 	protected Logger logger = LoggerFactory
 			.getLogger(this.getClass().getName());
 
@@ -27,6 +33,7 @@ public class FooGenericServiceImpl<T> implements FooGenericService<T> {
 	 * setFooGenericDao(fooDao);
 	 * 
 	 */
+	@Autowired
 	public void setFooGenericDao(FooGenericDao<T, String> fooGenericDao) {
 		this.fooGenericDao = fooGenericDao;
 	}
@@ -56,19 +63,19 @@ public class FooGenericServiceImpl<T> implements FooGenericService<T> {
 	}
 
 	public Filter getFilterFromExample(T example) {
-		return fooGenericDao.getFilterFromExample(example);
+		return null;
 	}
 
 	public Filter getFilterFromExample(T example, ExampleOptions options) {
-		return fooGenericDao.getFilterFromExample(example, options);
+		return null;
 	}
 
 	public T getReference(String id) {
-		return fooGenericDao.getReference(id);
+		return null;
 	}
 
 	public T[] getReferences(String... ids) {
-		return fooGenericDao.getReferences(ids);
+		return null;
 	}
 
 	public boolean isAttached(T entity) {
@@ -108,11 +115,7 @@ public class FooGenericServiceImpl<T> implements FooGenericService<T> {
 	}
 
 	public List<T> search(ISearch search) {
-		return fooGenericDao.search(search);
-	}
-
-	public SearchResult<T> searchAndCount(ISearch search) {
-		return fooGenericDao.searchAndCount(search);
+		return null;
 	}
 
 	public SearchResult<T> searchAndCount(FooGenericSearch search) {
@@ -299,6 +302,24 @@ public class FooGenericServiceImpl<T> implements FooGenericService<T> {
 			}
 		}
 		return listSearch;
+	}
+
+	@Override
+	public void doInTransaction(
+			FooGenericTransactionModel fooGenericTransactionModel) {
+		Session session = fooGenericDao.getSession();
+		Transaction tx = session.getTransaction();
+
+		// See:http://docs.jboss.org/hibernate/orm/4.1/manual/en-US/html/ch13.html#transactions-demarcation-nonmanaged
+		try {
+			fooGenericTransactionModel.execute();
+			// tx.setTimeout(200);
+		} catch (RuntimeException e) {
+			e.printStackTrace();
+			throw e;
+		} finally {
+			// session.close();
+		}
 	}
 
 }

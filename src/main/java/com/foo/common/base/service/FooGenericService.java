@@ -3,6 +3,7 @@ package com.foo.common.base.service;
 import java.util.List;
 
 import com.foo.common.base.pojo.FooGenericSearch;
+import com.foo.common.base.pojo.FooGenericTransactionModel;
 import com.googlecode.genericdao.search.ExampleOptions;
 import com.googlecode.genericdao.search.Filter;
 import com.googlecode.genericdao.search.ISearch;
@@ -159,7 +160,6 @@ public interface FooGenericService<T> {
 	 *            The result type is automatically determined by the context in
 	 *            which the method is called.
 	 */
-	public SearchResult<T> searchAndCount(ISearch search);
 
 	public SearchResult<T> searchAndCount(FooGenericSearch search);
 
@@ -190,4 +190,6 @@ public interface FooGenericService<T> {
 	 */
 	public Filter getFilterFromExample(T example, ExampleOptions options);
 
+	public void doInTransaction(
+			FooGenericTransactionModel fooGenericTransactionModel);
 }

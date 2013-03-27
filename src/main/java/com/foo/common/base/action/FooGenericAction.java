@@ -10,9 +10,7 @@ import org.apache.struts2.interceptor.ServletResponseAware;
 import org.apache.struts2.interceptor.SessionAware;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 
-import com.foo.common.base.service.FooSpringJdbcService;
 import com.opensymphony.xwork2.ActionSupport;
 
 /**
@@ -37,8 +35,6 @@ public class FooGenericAction extends ActionSupport implements
 	protected HttpServletResponse response;
 	protected Map<String, Object> session;
 
-	@Autowired
-	protected FooSpringJdbcService fooSpringJdbcService;
 	protected Logger logger = LoggerFactory
 			.getLogger(this.getClass().getName());
 

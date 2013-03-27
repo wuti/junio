@@ -9,6 +9,9 @@
 		<action name="getAjaxData" class="com.foo.example.action.HelloAction"
 			method="getAjaxData">
 		</action>
+		<action name="testSave" class="com.foo.example.action.HelloAction"
+			method="testSave">
+		</action>
 		<action name="quickCopyClass" class="com.foo.example.action.QuickOperationAction"
 			method="quickCopyClass">
 		</action>

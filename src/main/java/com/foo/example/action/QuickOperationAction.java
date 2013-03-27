@@ -1,10 +1,7 @@
 package com.foo.example.action;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.Map;
 import java.util.Properties;
 
 import org.apache.commons.io.FileUtils;
@@ -17,17 +14,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 
 import com.foo.common.base.action.FooGenericAction;
+import com.foo.common.base.service.FooGenericService;
 import com.foo.common.base.utils.FooUtils;
 import com.foo.example.model.QuickCopyModel;
-import com.foo.example.service.FooService;
 import com.google.common.base.Splitter;
-import com.google.common.collect.Maps;
 import com.google.common.io.Files;
 
 public class QuickOperationAction extends FooGenericAction {
 	private static final long serialVersionUID = 1L;
 	@Autowired
-	private FooService fooService;
+	private FooGenericService fooGenericService;
 
 	/**
 	 * 通过UI得到并解析需要部署的class的精确路径

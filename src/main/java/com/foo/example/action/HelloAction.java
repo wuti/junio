@@ -4,12 +4,16 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
+import javax.management.RuntimeErrorException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.foo.common.base.action.FooGenericAction;
+import com.foo.common.base.pojo.FooGenericSearch;
+import com.foo.common.base.pojo.FooGenericTransactionModel;
+import com.foo.common.base.service.FooGenericService;
 import com.foo.common.base.utils.FooUtils;
 import com.foo.example.model.Foo;
-import com.foo.example.service.FooService;
 import com.google.common.base.Strings;
 import com.google.common.collect.Maps;
 import com.googlecode.genericdao.search.Search;
@@ -19,7 +23,7 @@ import com.opensymphony.xwork2.Action;
 public class HelloAction extends FooGenericAction { // 模型驱动
 	private static final long serialVersionUID = 1L;
 	@Autowired
-	private FooService fooService;
+	private FooGenericService fooGenericService;
 
 	@Override
 	public String execute() throws Exception {
@@ -40,31 +44,20 @@ public class HelloAction extends FooGenericAction { // 模型驱动
 	 */
 	public void getAjaxData() throws IOException {
 
-		// System.out.println("enter1");
-		//
-		// Foo foo = new Foo();
-		//
-		// foo.setAlarmDefNo("4000");
-		// fooService.save(foo);
-		//
-		// System.out.println(fooService.count(new Search()));
-		//
-		// foo = new Foo();
-		// foo.setAlarmDefNo("4000");
-		// fooService.remove(foo);
-		//
-		// System.out.println("enter2");
-		System.out.println("a111");
+		System.out.println("return list");
 
 		Map<String, Object> myMap = Maps.newHashMap();
-		Search search = new Search();
+
+		FooGenericSearch search = new FooGenericSearch();
+		search.setQueryHql(" from Foo");
+		search.setCountHql(" select count(*) from Foo");
 		List<Foo> myList = null;
 
 		if (Strings.nullToEmpty(request.getParameter("bNeedPaging")).equals(
 				"false")) {
-			myList = fooService.search(search);
+			myList = fooGenericService.search(search);
 			myMap.put("aaData", myList);
-			int myCount = fooService.count(search);
+			int myCount = fooGenericService.count(search);
 			myMap.put("iTotalRecords", myCount);
 			myMap.put("iTotalDisplayRecords", myCount);
 		} else {
@@ -72,7 +65,8 @@ public class HelloAction extends FooGenericAction { // 模型驱动
 			String iDisplayStart = request.getParameter("iDisplayStart");
 			search.setFirstResult(Integer.parseInt(iDisplayStart));
 			search.setMaxResults(Integer.parseInt(iDisplayLength));
-			SearchResult<Foo> searchResult = fooService.searchAndCount(search);
+			SearchResult<Foo> searchResult = fooGenericService
+					.searchAndCount(search);
 			myList = searchResult.getResult();
 			myMap.put("aaData", myList);
 			myMap.put("iTotalRecords", searchResult.getTotalCount());
@@ -104,6 +98,17 @@ public class HelloAction extends FooGenericAction { // 模型驱动
 		FooUtils.printJsonSuccessMsg(response);
 	}
 
+	public void testSave() throws IOException {
+		fooGenericService.doInTransaction(new FooGenericTransactionModel() {
+			@Override
+			public void execute() {
+				fooGenericService.save(new Foo());
+				throw new RuntimeException();
+			}
+		});
+		FooUtils.printJsonSuccessMsg(response);
+	}
+
 	/**
 	 * 增加jqGrid插件分页列表
 	 * 
@@ -118,7 +123,8 @@ public class HelloAction extends FooGenericAction { // 模型驱动
 
 		search.setFirstResult((page - 1) * rows);
 		search.setMaxResults(rows);
-		SearchResult<Foo> searchResult = fooService.searchAndCount(search);
+		SearchResult<Foo> searchResult = null;
+		// SearchResult<Foo> searchResult = fooService.searchAndCount(search);
 		List<Foo> myList = searchResult.getResult();
 
 		Map<String, Object> myMap = Maps.newHashMap();
