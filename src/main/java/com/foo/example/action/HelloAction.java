@@ -93,6 +93,7 @@ public class HelloAction extends FooGenericAction { // 模型驱动
 		System.out.println(text);
 		System.out.println(href);
 		FooUtils.printJsonSuccessMsg(response);
+		System.out.println("fuck");
 	}
 
 	public void testSave() throws IOException {
