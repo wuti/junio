@@ -3,23 +3,23 @@ package com.foo.common.base.pojo;
 import java.io.Serializable;
 import java.util.List;
 
-public class FooGenericSearchResult<T> implements Serializable {
+public class FooGenericSearchResult implements Serializable {
 	private static final long serialVersionUID = 1L;
 
-	protected List<T> result;
+	protected List result;
 	protected int totalCount = -1;
 
 	/**
 	 * The results of the search.
 	 */
-	public List<T> getResult() {
+	public List getResult() {
 		return result;
 	}
 
 	/**
 	 * The results of the search.
 	 */
-	public void setResult(List<T> results) {
+	public void setResult(List results) {
 		this.result = results;
 	}
 

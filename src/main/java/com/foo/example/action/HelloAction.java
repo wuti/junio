@@ -48,7 +48,7 @@ public class HelloAction extends FooGenericAction { // 模型驱动
 		FooGenericSearch search = new FooGenericSearch();
 		search.setQueryHql(" from Foo");
 		search.setCountHql(" select count(*) from Foo");
-		List<Foo> myList = null;
+		List<?> myList = null;
 
 		if (Strings.nullToEmpty(request.getParameter("bNeedPaging")).equals(
 				"false")) {
@@ -62,7 +62,7 @@ public class HelloAction extends FooGenericAction { // 模型驱动
 			String iDisplayStart = request.getParameter("iDisplayStart");
 			search.setFirstResult(Integer.parseInt(iDisplayStart));
 			search.setMaxResults(Integer.parseInt(iDisplayLength));
-			FooGenericSearchResult<Foo> searchResult = fooGenericService
+			FooGenericSearchResult searchResult = fooGenericService
 					.searchAndCount(search);
 			myList = searchResult.getResult();
 			myMap.put("aaData", myList);

@@ -1,5 +1,6 @@
 package com.foo.common.base.service;
 
+import java.io.Serializable;
 import java.util.List;
 
 import com.foo.common.base.pojo.FooGenericSearch;
@@ -57,6 +58,32 @@ public interface FooGenericService<T> {
 	public T[] getReferences(String... ids);
 
 	/**
+	 * Remove a persistent instance from the datastore. The argument may be an
+	 * instance associated with the receiving <tt>Session</tt> or a transient
+	 * instance with an identifier associated with existing persistent state.
+	 * This operation cascades to associated instances if the association is
+	 * mapped with {@code cascade="delete"}
+	 * 
+	 * @param object
+	 *            the instance to be removed
+	 */
+	public void delete(Object object);
+
+	/**
+	 * Remove a persistent instance from the datastore. The <b>object</b>
+	 * argument may be an instance associated with the receiving
+	 * <tt>Session</tt> or a transient instance with an identifier associated
+	 * with existing persistent state. This operation cascades to associated
+	 * instances if the association is mapped with {@code cascade="delete"}
+	 * 
+	 * @param entityName
+	 *            The entity name for the instance to be removed.
+	 * @param object
+	 *            the instance to be removed
+	 */
+	public void delete(String entityName, Object object);
+
+	/**
 	 * <p>
 	 * If the id of the entity is null or zero, add it to the datastore and
 	 * assign it an id; otherwise, update the corresponding entity in the
@@ -70,7 +97,7 @@ public interface FooGenericService<T> {
 	 * 
 	 * @return <code>true</code> if create; <code>false</code> if update.
 	 */
-	public boolean save(T entity);
+	public Serializable save(Object object);
 
 	/**
 	 * <p>
@@ -158,7 +185,7 @@ public interface FooGenericService<T> {
 	 *            which the method is called.
 	 */
 
-	public FooGenericSearchResult<T> searchAndCount(FooGenericSearch search);
+	public FooGenericSearchResult searchAndCount(FooGenericSearch search);
 
 	/**
 	 * Returns <code>true</code> if the object is connected to the current

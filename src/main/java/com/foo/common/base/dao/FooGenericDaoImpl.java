@@ -1,8 +1,8 @@
 package com.foo.common.base.dao;
 
 import java.io.Serializable;
-import java.util.List;
 
+import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -45,42 +45,73 @@ public class FooGenericDaoImpl<T, ID extends Serializable> implements
 	}
 
 	@Override
-	public boolean[] save(List<T> entities) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public <RT> FooGenericSearchResult<RT> searchAndCount(
+	public FooGenericSearchResult searchAndCount(
 			FooGenericSearch fooGenericSearch) {
 
 		Query query = getSession().createQuery(fooGenericSearch.getQueryHql());
 		query.setFirstResult(fooGenericSearch.getFirstResult());
 		query.setMaxResults(fooGenericSearch.getMaxResults());
-		FooGenericSearchResult<RT> myResult = new FooGenericSearchResult<RT>();
+		FooGenericSearchResult myResult = new FooGenericSearchResult();
 		myResult.setResult(query.list());
-
 		query = getSession().createQuery(fooGenericSearch.getCountHql());
 		myResult.setTotalCount(((Number) query.uniqueResult()).intValue());
 		return myResult;
+
 	}
 
 	@Override
-	public boolean save(T entity) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean[] save(T... entities) {
+	public Object get(Class<T> clazz, Serializable id) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public List<T> findAll() {
-		// TODO Auto-generated method stub
-		return null;
+	public Serializable save(Object object) {
+		return getSession().save(object);
 	}
 
+	@Override
+	public void delete(Object object) {
+		getSession().delete(object);
+	}
+
+	@Override
+	public void delete(String entityName, Object object) {
+		getSession().delete(entityName, object);
+	}
+
+	@Override
+	public Serializable save(String entityName, Object object) {
+		return getSession().save(entityName, object);
+	}
+
+	@Override
+	public void saveOrUpdate(Object object) {
+		getSession().save(object);
+	}
+
+	@Override
+	public void saveOrUpdate(String entityName, Object object) {
+		getSession().saveOrUpdate(entityName, object);
+	}
+
+	@Override
+	public void update(Object object) {
+		getSession().update(object);
+	}
+
+	@Override
+	public void update(String entityName, Object object) {
+		getSession().update(entityName, object);
+	}
+
+	@Override
+	public void flush() throws HibernateException {
+		getSession().flush();
+	}
+
+	@Override
+	public void clear() {
+		getSession().clear();
+	}
 }

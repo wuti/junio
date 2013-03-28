@@ -1,5 +1,6 @@
 package com.foo.common.base.service;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -37,12 +38,12 @@ public class FooGenericServiceImpl<T> implements FooGenericService<T> {
 		return this.fooGenericDao;
 	}
 
-	public boolean save(T entity) {
+	public Serializable save(Object entity) {
 		return fooGenericDao.save(entity);
 	}
 
 	public boolean[] save(T... entities) {
-		return fooGenericDao.save(entities);
+		return null;
 	}
 
 	/**
@@ -233,7 +234,7 @@ public class FooGenericServiceImpl<T> implements FooGenericService<T> {
 	}
 
 	@Override
-	public FooGenericSearchResult<T> searchAndCount(
+	public FooGenericSearchResult searchAndCount(
 			FooGenericSearch fooGenericSearch) {
 		return fooGenericDao.searchAndCount(fooGenericSearch);
 	}
@@ -314,6 +315,16 @@ public class FooGenericServiceImpl<T> implements FooGenericService<T> {
 	public void flush() {
 		// TODO Auto-generated method stub
 
+	}
+
+	@Override
+	public void delete(Object object) {
+		fooGenericDao.delete(object);
+	}
+
+	@Override
+	public void delete(String entityName, Object object) {
+		fooGenericDao.delete(entityName, object);
 	}
 
 }
