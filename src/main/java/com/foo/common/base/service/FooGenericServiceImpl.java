@@ -13,13 +13,8 @@ import org.springframework.stereotype.Service;
 
 import com.foo.common.base.dao.FooGenericDao;
 import com.foo.common.base.pojo.FooGenericSearch;
+import com.foo.common.base.pojo.FooGenericSearchResult;
 import com.foo.common.base.pojo.FooGenericTransactionModel;
-import com.googlecode.genericdao.search.ExampleOptions;
-import com.googlecode.genericdao.search.Filter;
-import com.googlecode.genericdao.search.ISearch;
-import com.googlecode.genericdao.search.Search;
-import com.googlecode.genericdao.search.SearchResult;
-import com.googlecode.genericdao.search.Sort;
 
 @Service
 public class FooGenericServiceImpl<T> implements FooGenericService<T> {
@@ -42,88 +37,12 @@ public class FooGenericServiceImpl<T> implements FooGenericService<T> {
 		return this.fooGenericDao;
 	}
 
-	public int count(ISearch search) {
-		return fooGenericDao.count(search);
-	}
-
-	public T find(String id) {
-		return fooGenericDao.find(id);
-	}
-
-	public T[] find(String... ids) {
-		return fooGenericDao.find(ids);
-	}
-
-	public List<T> findAll() {
-		return fooGenericDao.findAll();
-	}
-
-	public void flush() {
-		fooGenericDao.flush();
-	}
-
-	public Filter getFilterFromExample(T example) {
-		return null;
-	}
-
-	public Filter getFilterFromExample(T example, ExampleOptions options) {
-		return null;
-	}
-
-	public T getReference(String id) {
-		return null;
-	}
-
-	public T[] getReferences(String... ids) {
-		return null;
-	}
-
-	public boolean isAttached(T entity) {
-		return fooGenericDao.isAttached(entity);
-	}
-
-	public void refresh(T... entities) {
-		fooGenericDao.refresh(entities);
-	}
-
-	public boolean remove(T entity) {
-		return fooGenericDao.remove(entity);
-	}
-
-	public void remove(T... entities) {
-		fooGenericDao.remove(entities);
-	}
-
-	public void remove(List<T> entities) {
-		fooGenericDao.remove(entities);
-	}
-
-	public boolean removeById(String id) {
-		return fooGenericDao.removeById(id);
-	}
-
-	public void removeByIds(String... ids) {
-		fooGenericDao.removeByIds(ids);
-	}
-
 	public boolean save(T entity) {
 		return fooGenericDao.save(entity);
 	}
 
 	public boolean[] save(T... entities) {
 		return fooGenericDao.save(entities);
-	}
-
-	public List<T> search(ISearch search) {
-		return null;
-	}
-
-	public SearchResult<T> searchAndCount(FooGenericSearch search) {
-		return fooGenericDao.searchAndCount(search);
-	}
-
-	public T searchUnique(ISearch search) {
-		return fooGenericDao.searchUnique(search);
 	}
 
 	/**
@@ -137,39 +56,15 @@ public class FooGenericServiceImpl<T> implements FooGenericService<T> {
 	 * @since August,2011
 	 * 
 	 */
-	public Search getSqlFromRequestMap(
-			@SuppressWarnings("rawtypes") Map requestMap, Search search) {
+	public String getSqlFromRequestMap(
+			@SuppressWarnings("rawtypes") Map requestMap,
+			FooGenericSearch search) {
 		String clause;
 		String clauseValue;
 		for (Object keyObject : requestMap.keySet()) {
 			clause = String.valueOf(keyObject);
 			// This operation is safe, view j2ee5 API please.
 			clauseValue = ((String[]) requestMap.get(clause))[0].toString();
-			if (clauseValue.equals("")) {
-				continue;
-			} else if (clause.indexOf("StringEqual") != -1) {
-				clause = clause.substring(0, clause.indexOf("StringEqual"));
-				search.addFilterEqual(clause, clauseValue.trim());
-			} else if (clause.indexOf("StringLike") != -1) {
-				clause = clause.substring(0, clause.indexOf("StringLike"));
-				search.addFilterLike(clause, "%" + clauseValue.trim() + "%");
-			} else if (clause.indexOf("DateGreaterThan") != -1) {
-				clause = clause.substring(0, clause.indexOf("DateGreaterThan"));
-				search.addFilterGreaterThan(clause, clauseValue.trim());
-			} else if (clause.indexOf("DateLessThan") != -1) {
-				clause = clause.substring(0, clause.indexOf("DateLessThan"));
-				search.addFilterLessThan(clause, clauseValue.trim());
-			} else if (clause.indexOf("sort") != -1) {
-				Sort sort = new Sort();
-				sort.setProperty(clauseValue);
-				String order = requestMap.get("order").toString();
-				if ("desc".equals(order)) {
-					sort.setDesc(true);
-				} else {
-					sort.setDesc(false);
-				}
-				search.addSort(sort);
-			}
 
 			// 暂时不使用datatables列表控件，因此注释点一下搜索以及排序功能
 			// else if (clause.indexOf("sSearch") != -1) {// 增加搜索功能 add by colin
@@ -281,12 +176,9 @@ public class FooGenericServiceImpl<T> implements FooGenericService<T> {
 			// }
 			// }
 
-			else {
-
-			}
 		}
 		logger.info("search=" + search);
-		return search;
+		return "";
 	}
 
 	public List<String> getSeachColumn(
@@ -320,6 +212,108 @@ public class FooGenericServiceImpl<T> implements FooGenericService<T> {
 		} finally {
 			// session.close();
 		}
+	}
+
+	@Override
+	public List<T> search(FooGenericSearch search) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public T searchUnique(FooGenericSearch search) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public int count(FooGenericSearch search) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public FooGenericSearchResult<T> searchAndCount(
+			FooGenericSearch fooGenericSearch) {
+		return fooGenericDao.searchAndCount(fooGenericSearch);
+	}
+
+	@Override
+	public T find(String id) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public T[] find(String... ids) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public T getReference(String id) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public T[] getReferences(String... ids) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public boolean remove(T entity) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public void remove(T... entities) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void remove(List<T> entities) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public boolean removeById(String id) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public void removeByIds(String... ids) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public List<T> findAll() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public boolean isAttached(T entity) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public void refresh(T... entities) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void flush() {
+		// TODO Auto-generated method stub
+
 	}
 
 }

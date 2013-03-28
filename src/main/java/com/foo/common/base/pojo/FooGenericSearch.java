@@ -1,10 +1,12 @@
 package com.foo.common.base.pojo;
 
-import com.googlecode.genericdao.search.Search;
+import java.io.Serializable;
 
-public class FooGenericSearch extends Search {
+public class FooGenericSearch implements Serializable {
 	private static final long serialVersionUID = 1L;
+	protected int firstResult = -1; // -1 stands for unspecified
 
+	protected int maxResults = -1; // -1 stands for unspecified
 	private String countHql;
 	private String queryHql;
 
@@ -22,5 +24,21 @@ public class FooGenericSearch extends Search {
 
 	public void setQueryHql(String queryHql) {
 		this.queryHql = queryHql;
+	}
+
+	public int getFirstResult() {
+		return firstResult;
+	}
+
+	public void setFirstResult(int firstResult) {
+		this.firstResult = firstResult;
+	}
+
+	public int getMaxResults() {
+		return maxResults;
+	}
+
+	public void setMaxResults(int maxResults) {
+		this.maxResults = maxResults;
 	}
 }

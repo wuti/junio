@@ -3,11 +3,8 @@ package com.foo.common.base.service;
 import java.util.List;
 
 import com.foo.common.base.pojo.FooGenericSearch;
+import com.foo.common.base.pojo.FooGenericSearchResult;
 import com.foo.common.base.pojo.FooGenericTransactionModel;
-import com.googlecode.genericdao.search.ExampleOptions;
-import com.googlecode.genericdao.search.Filter;
-import com.googlecode.genericdao.search.ISearch;
-import com.googlecode.genericdao.search.SearchResult;
 
 public interface FooGenericService<T> {
 
@@ -134,7 +131,7 @@ public interface FooGenericService<T> {
 	 *            The result type is automatically determined by the context in
 	 *            which the method is called.
 	 */
-	public List<T> search(ISearch search);
+	public List<T> search(FooGenericSearch search);
 
 	/**
 	 * Search for a single entity using the given parameters.
@@ -143,13 +140,13 @@ public interface FooGenericService<T> {
 	 *            The result type is automatically determined by the context in
 	 *            which the method is called.
 	 */
-	public T searchUnique(ISearch search);
+	public T searchUnique(FooGenericSearch search);
 
 	/**
 	 * Returns the total number of results that would be returned using the
 	 * given <code>ISearch</code> if there were no paging or maxResults limits.
 	 */
-	public int count(ISearch search);
+	public int count(FooGenericSearch search);
 
 	/**
 	 * Returns a <code>SearchResult</code> object that includes both the list of
@@ -161,7 +158,7 @@ public interface FooGenericService<T> {
 	 *            which the method is called.
 	 */
 
-	public SearchResult<T> searchAndCount(FooGenericSearch search);
+	public FooGenericSearchResult<T> searchAndCount(FooGenericSearch search);
 
 	/**
 	 * Returns <code>true</code> if the object is connected to the current
@@ -178,17 +175,6 @@ public interface FooGenericService<T> {
 	 * Flushes changes in the Hibernate session to the datastore.
 	 */
 	public void flush();
-
-	/**
-	 * Generates a search filter from the given example using default options.
-	 */
-	public Filter getFilterFromExample(T example);
-
-	/**
-	 * Generates a search filter from the given example using the specified
-	 * options.
-	 */
-	public Filter getFilterFromExample(T example, ExampleOptions options);
 
 	public void doInTransaction(
 			FooGenericTransactionModel fooGenericTransactionModel);

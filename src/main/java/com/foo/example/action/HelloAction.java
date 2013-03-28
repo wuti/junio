@@ -4,20 +4,17 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
-import javax.management.RuntimeErrorException;
-
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.foo.common.base.action.FooGenericAction;
 import com.foo.common.base.pojo.FooGenericSearch;
+import com.foo.common.base.pojo.FooGenericSearchResult;
 import com.foo.common.base.pojo.FooGenericTransactionModel;
 import com.foo.common.base.service.FooGenericService;
 import com.foo.common.base.utils.FooUtils;
 import com.foo.example.model.Foo;
 import com.google.common.base.Strings;
 import com.google.common.collect.Maps;
-import com.googlecode.genericdao.search.Search;
-import com.googlecode.genericdao.search.SearchResult;
 import com.opensymphony.xwork2.Action;
 
 public class HelloAction extends FooGenericAction { // 模型驱动
@@ -65,7 +62,7 @@ public class HelloAction extends FooGenericAction { // 模型驱动
 			String iDisplayStart = request.getParameter("iDisplayStart");
 			search.setFirstResult(Integer.parseInt(iDisplayStart));
 			search.setMaxResults(Integer.parseInt(iDisplayLength));
-			SearchResult<Foo> searchResult = fooGenericService
+			FooGenericSearchResult<Foo> searchResult = fooGenericService
 					.searchAndCount(search);
 			myList = searchResult.getResult();
 			myMap.put("aaData", myList);
@@ -109,31 +106,4 @@ public class HelloAction extends FooGenericAction { // 模型驱动
 		FooUtils.printJsonSuccessMsg(response);
 	}
 
-	/**
-	 * 增加jqGrid插件分页列表
-	 * 
-	 * @throws Exception
-	 */
-	public void jqgridList() throws Exception {
-		String pageStr = request.getParameter("page");
-		String rowsStr = request.getParameter("rows");
-		int page = Integer.parseInt(pageStr);
-		int rows = Integer.parseInt(rowsStr);
-		Search search = new Search();
-
-		search.setFirstResult((page - 1) * rows);
-		search.setMaxResults(rows);
-		SearchResult<Foo> searchResult = null;
-		// SearchResult<Foo> searchResult = fooService.searchAndCount(search);
-		List<Foo> myList = searchResult.getResult();
-
-		Map<String, Object> myMap = Maps.newHashMap();
-		myMap.put("records", searchResult.getTotalCount()); // 总条数
-		myMap.put("gridModel", myList);
-		myMap.put("rows", rows);
-		myMap.put("page", page); // 当前页
-		myMap.put("totalPage", 13); // 需要计算 总页数
-
-		FooUtils.printJsonObject(response, myMap);
-	}
 }
